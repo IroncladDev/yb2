@@ -1,0 +1,11 @@
+.transparent {
+  opacity: 0 !important;
+  transition: 1s !important;
+  transform: translatey(50px) !important;
+}
+.visible {
+  opacity: 1 !important;
+  transition: 1s !important;
+  transform: translatey(0px) !important;
+}
+/*adjacent-mosquito-4*/

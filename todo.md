@@ -1,0 +1,6 @@
+ - signup
+ - login
+ - forgot password page
+ - explore
+ - search
+ - admin

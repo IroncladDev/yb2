@@ -1,0 +1,76 @@
+.form{
+  background: var(--background-default);
+  border-radius: var(--space-16);
+  padding: var(--space-16);
+  width: 80%;
+  height: 80%;
+  max-width: 800px;
+  max-height: 600px;
+  box-shadow: 0 5px 40px 0 rgba(0,0,0,0.3);
+  display: flex;
+}
+.formIntro {
+  display: grid;
+  grid-template-columns: 1fr;
+  flex: 1 1 0px;
+  margin-right: 10px;
+}
+.layer {
+  grid-row-start: 1;
+  grid-column-start: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.formBody{
+  flex: 1 1 0px;
+  padding: var(--space-16);
+  margin-left: 10px;
+  overflow-y: auto;
+}
+
+@media(max-width: 800px){
+  .form{
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+  }
+}
+@media(max-width: 650px){
+  .formIntro{
+    display: none;
+  }
+}
+
+.tos{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 90%;
+  max-width: 900px;
+  max-height: 700px;
+  border-radius: var(--space-16);
+  padding: var(--space-16);
+  z-index: 10;
+  background: var(--background-default);
+  box-shadow: 0 0 0 100vw rgba(0,0,0,0.3);
+  overflow-y: auto;
+}
+.tosrow{
+  display: flex;
+  align-items: center;
+}
+.tosrow > p{
+  margin-left: 10px;
+}
+.error{
+  color: var(--accent-negative-default);
+  background: var(--accent-negative-overlay);
+  padding: 15px;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+.elist{
+  margin: 5px 0;
+}
