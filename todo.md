@@ -4,3 +4,4 @@
  - explore
  - search
  - admin
+ - 404 page

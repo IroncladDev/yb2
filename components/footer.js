@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
-import ui from '../styles/ui.module.css'
-import styles from '../styles/components/footer.module.css'
+import ui from '../styles/ui.module.scss'
+import styles from '../styles/components/footer.module.scss'
 import { loadGetInitialProps } from 'next/dist/shared/lib/utils'
 export default function Footer(props) {
   return (<div style={{ background: props.background }}>

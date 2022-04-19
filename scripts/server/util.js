@@ -221,6 +221,7 @@ export function vfEmail(link) {
         <a href="http://${link}">
           <button class="link-btn">Verify Account</button>
         </a>
+        <p>In case the link didn't work, try <a href="http://${link}">http://${link}</a></p>
         <hr>
         <div class="center">&copy; YouBarter® 2021, All Rights Reserved</div>
         <div class="center"><a href="mailto:contact.youbarter@gmail.com">contact.youbarter@gmail.com</a></div>
@@ -320,6 +321,7 @@ export function fgEmail(link) {
         <a href="http://${link}">
           <button class="link-btn">Reset Password</button>
         </a>
+        <p>In case the link didn't work, try <a href="http://${link}">http://${link}</a></p>
         <hr>
         <div class="center">&copy; YouBarter® 2021, All Rights Reserved</div>
         <div class="center"><a href="mailto:contact.youbarter@gmail.com">contact.youbarter@gmail.com</a></div>

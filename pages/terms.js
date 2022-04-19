@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
-import ui from '../styles/ui.module.css'
+import ui from '../styles/ui.module.scss'
 import Nav from '../components/nav'
 import Footer from '../components/footer'
 import Link from 'next/link'

@@ -1,0 +1,5 @@
+<svg viewBox="0 0 50 100" xmlns="http://www.w3.org/2000/svg">
+  <defs></defs>
+  <path style="stroke-linejoin: round; fill: rgb(71, 117, 104); stroke: rgb(55, 107, 96);" d="M 25.072 49.956 C 20.189 30.354 9.974 25 10 15 C 10 -4.5 40 -4.5 40 15 C 39.987 25 30 30 25 50 L 25.072 49.956 Z"></path>
+  <ellipse style="stroke: rgb(55, 107, 96); fill: rgb(42, 88, 78);" cx="25" cy="15" rx="5" ry="5"></ellipse>
+</svg>

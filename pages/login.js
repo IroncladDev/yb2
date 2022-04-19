@@ -1,6 +1,6 @@
-import ui from '../styles/ui.module.css';
+import ui from '../styles/ui.module.scss';
 import Head from 'next/head';
-import styles from '../styles/pages/login.module.css'
+import styles from '../styles/pages/login.module.scss'
 import Link from 'next/link'
 import { useState, useRef } from 'react';
 import Swal from '../scripts/client/modal';

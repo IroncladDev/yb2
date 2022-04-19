@@ -5,7 +5,7 @@ export async function authUser(req, res, next) {
   let findUser = await User.findOne({ sid: req.cookies.sid });
   if (findUser) {
     if (findUser.verified) {
-      next();
+      next(findUser);
     } else {
       res.status(401).json({
         message: "Please verify your email address",

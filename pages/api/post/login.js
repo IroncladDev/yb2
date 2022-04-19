@@ -10,7 +10,7 @@ app.post(async (req, res) => {
     if (passwordCorrect) {
       if (findUser.verified) {
         res.setHeader('Set-Cookie', [`sid=${findUser.sid}; path=/; Max-Age=${1000 * 60 * 60 * 24 * 365 * 10}`]);
-        res.redirect("/dashboard");
+        res.redirect("/home");
       } else {
         res.setHeader('Set-Cookie', [`sid=${findUser.sid}; path=/; Max-Age=${1000 * 60 * 60 * 24 * 365 * 10}`, `verified=0;path=/;Max-Age=${1000 * 60 * 60 * 24 * 365 * 10}`]);
         res.redirect("/verify");

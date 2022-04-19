@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "query": [
+    "77379"
+  ],
+  "features": [
+    {
+      "id": "postcode.12158156492188750",
+      "type": "Feature",
+      "place_type": [
+        "postcode"
+      ],
+      "relevance": 1,
+      "properties": {},
+      "text": "77379",
+      "place_name": "Spring, Texas 77379, United States",
+      "bbox": [
+        -95.588245546,
+        29.987107039,
+        -95.476122026,
+        30.093915967
+      ],
+      "center": [
+        -95.52,
+        30.02
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -95.52,
+          30.02
+        ]
+      },
+      "context": [
+        {
+          "id": "place.15665131714604080",
+          "wikidata": "Q981346",
+          "text": "Spring"
+        },
+        {
+          "id": "district.6922667944835460",
+          "wikidata": "Q26676",
+          "text": "Harris County"
+        },
+        {
+          "id": "region.12968715825342410",
+          "short_code": "US-TX",
+          "wikidata": "Q1439",
+          "text": "Texas"
+        },
+        {
+          "id": "country.14135384517372290",
+          "wikidata": "Q30",
+          "short_code": "us",
+          "text": "United States"
+        }
+      ]
+    }
+  ],
+  "attribution": "NOTICE: © 2022 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
+}

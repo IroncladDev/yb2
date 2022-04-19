@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
-import styles from '../styles/pages/index.module.css'
-import ui from '../styles/ui.module.css'
+import styles from '../styles/pages/index.module.scss'
+import ui from '../styles/ui.module.scss'
 import Nav from '../components/nav'
 import Footer from '../components/footer'
 export default function Contact(props) {

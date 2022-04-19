@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import ui from '../styles/ui.module.css';
-import styles from '../styles/components/nav.module.css'
+import ui from '../styles/ui.module.scss';
+import styles from '../styles/components/nav.module.scss'
 import { useState } from 'react';
 import Link from 'next/link'
 export default function Nav(){

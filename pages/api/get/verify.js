@@ -10,7 +10,7 @@ app.get(async (req, res) => {
     findUser.save();
     res.status(200);
     res.setHeader('Set-Cookie', [`verified=; path=/; Max-Age=${1}`]);
-    res.redirect("/dashboard")
+    res.redirect("/home")
   }else{
     res.status(404).redirect("/signup")
   }

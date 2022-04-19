@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
-import ui from '../styles/ui.module.css'
+import ui from '../styles/ui.module.scss'
 import Nav from '../components/nav'
 import Fade from '../components/fade'
 import Link from 'next/link'
@@ -53,7 +53,7 @@ export function getServerSideProps({req, res}){
   if(req.cookies.sid && !req.cookies.verified){
     return {
       redirect: {
-        destination: "/dashboard"
+        destination: "/home"
       }
     }
   }else if(!req.cookies.verified && !req.cookies.sid){

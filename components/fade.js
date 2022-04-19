@@ -1,4 +1,4 @@
-import styles from '../styles/components/fade.module.css'
+import styles from '../styles/components/fade.module.scss'
 import { useState, useEffect, useRef } from 'react'
 export default function Fade(props) {
   const [visible, setVis] = useState(false);
