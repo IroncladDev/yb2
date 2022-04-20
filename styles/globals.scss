@@ -402,3 +402,25 @@ hr {
 .swal2-input::placeholder{
   color: var(--outline-dimmest) !important;
 }
+
+.mapboxgl-ctrl-geocoder--input:focus{
+  outline: none !important;
+}
+.suggestions{
+  box-shadow: var(--shadow-lighter) !important;
+  transition: 0.15s;
+  & > li{
+    transition: 0.15s;
+    background: var(--background-default);
+    &:hover{
+      background: var(--background-root);
+    }
+  }
+}
+li.active > a{
+  transition: 0.15s;
+  background: var(--background-root) !important;
+  &:hover{
+    background: var(--background-highest) !important;
+  }
+}

@@ -2,11 +2,12 @@ import ui from '../styles/ui.module.scss';
 import Head from 'next/head';
 import styles from '../styles/pages/login.module.scss'
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import Link from 'next/link'
+import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 
 function TRow(props) {
   const [checked, setChecked] = useState(false);
+  const [loc, setLoc] = useState({});
   const handleCheck = (e) => {
     setChecked(e.target.checked);
   }

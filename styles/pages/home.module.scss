@@ -5,14 +5,6 @@
 
   align-items: stretch;
 
-  &>.profileNav {
-    min-width: 60px;
-    max-width: 60px;
-    box-shadow: var(--shadow-default);
-    background: var(--background-default);
-    z-index: 5;
-  }
-
   &>.mapCore {
     flex-grow: 1;
   }
@@ -26,26 +18,222 @@
 .searchEngine {
   position: absolute;
   top: 0;
-  width: 300px;
+  left: 0;
   height: 100%;
+  overflow-y: auto;
   background: var(--background-default);
   box-shadow: var(--shadow-default);
+  transition: 0.25s;
+  padding: 20px;
 
-  &.showSearch{
-    left: 0;
+  &.showSearch {
+    transform: scaleX(1) translateX(0);
+    width: 300px;
   }
-  &.hideSearch{
-    left: -300px;
+
+  &.hideSearch {
+    transform: scaleX(0) translateX(-100%);
+    width: 0;
   }
 }
 
-.showSearchButton{
+.showSearchButton {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 60px;
+  top: 50%;
+  transform: translatey(-50%);
+  width: 30px;
   height: 60px;
   background: var(--background-default);
-  box-shadow: var(--shadow-default);
+  border-radius: 0 5px 5px 0;
   z-index: 5;
+  transition: 0.25s;
+  box-shadow: 2px 0 2px 0 rgba(0, 0, 0, 0.1);
+
+  &>svg {
+    vertical-align: middle;
+    color: var(--foreground-dimmest);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: 0.25s;
+  }
+
+  &.showSearch>svg {
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.showSearch {
+    left: 300px;
+  }
+
+  &.hideSearch {
+    left: 0px;
+  }
+}
+
+.viewPopup {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--background-default);
+  box-shadow: var(--shadow-default);
+  transition: 0.25s;
+
+  &.hideViewItem {
+    height: 0;
+    transform: scaleY(0) translateY(100%);
+  }
+
+  &.showViewItem {
+    height: 300px;
+    transform: scaleY(1) translateY(0%);
+  }
+}
+
+.searchContainer {
+  margin-bottom: 20px;
+  &>div {
+    width: 100%;
+    outline: none !important;
+    box-shadow: var(--shadow-lightest);
+    border: solid var(--outline-default) 1px;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(32, 168, 139, 0.219);
+    border-color: var(--accent-primary-stronger) !important;
+    outline: none !important;
+  }
+}
+
+.collapseGroup{
+  position: relative;
+  transition: 0.25s;
+  & > .collapseGroupHeader{
+    padding:5px;
+    width: 100%;
+    display: flex;
+    border-bottom: solid var(--outline-default) 1px;
+    transition: 0.25s;
+    &.collapseClosed > .collapseGroupHeaderIcon > svg{
+      transform: rotate(-90deg);
+    }
+    &.collapseOpen{
+      transform: rotate(0deg);
+    }
+    &:hover{
+      background: var(--white-stronger);
+      cursor: pointer;
+    }
+    & > .collapseGroupHeaderText{
+      flex-grow: 1;
+      color: var(--foreground-dimmer);
+      text-align: left;
+      font-weight: 500;
+      font-size: 18px;
+      padding: 0 10px;
+    }
+    & > .collapseGroupHeaderIcon{
+      float: right;
+      & > svg{
+        transition: 0.25s;
+      }
+    }
+  }
+  & > .collapseGroupContent{
+    padding: 10px 25px;
+    border-bottom: solid var(--outline-default) 1px;
+    &.collapseClosed{
+      display: none;
+    }
+    &.collapseOpen{
+      display: block;
+    }
+  }
+}
+
+.collapseContainer{
+  border-radius: 5px;
+  border: solid var(--outline-default) 0.5px;
+  overflow: hidden;
+  box-shadow: var(--shadow-dimmer);
+  border-bottom: none;
+}
+
+.checkboxField {
+  display: block;
+  position: relative;
+  margin: 10px 0;
+  padding-left: 25px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkboxField input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+
+.checkmark {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: var(--white-stronger);
+  border-radius: 3px;
+}
+.checkboxField:hover input ~ .checkmark {
+  background-color: var(--white-default);
+}
+.checkboxField input:checked ~ .checkmark {
+  background-color: var(--accent-primary-default);
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.checkboxField input:checked ~ .checkmark:after {
+  display: block;
+}
+.checkboxField .checkmark:after {
+  left: 7px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--white-strongest);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.searchResults{
+  border-radius: 5px;
+  border: solid 1px var(--outline-default);
+  border-bottom: none;
+  box-shadow: var(--shadow-default);
+  & > .searchResult{
+    padding: 5px 10px;
+    color: var(--foreground-dimmer);
+    font-size: 14px;
+    border-bottom: solid 1px var(--outline-default);
+    &:hover{
+      background: var(--white-stronger) 1px;
+      cursor: pointer;
+    }
+  }
 }

@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
   displayName: { type: String, index: true }, //nickname
   email: { type: String, index: true }, //email
   bio: { type: String, index: true, default: "" }, //bio
-  address: { type: String, index: true }, //address
   phone: { type: Number, index: true }, //phone
   image: { type: String, index: true, default: "/images/user.png" }, //pfp url
   salt: { type: String, index: true }, //salt
@@ -15,14 +14,12 @@ const userSchema = new mongoose.Schema({
 })
 const serviceSchema = new mongoose.Schema({
   title: { type: String, index: true }, // Title
-  category: { type: String, index: true }, // category
+  tags: { type: Array, index: true }, // category
   typeBool: { type: Boolean, index: true, default: false }, // f = goods, t = services
   description: { type: String, index: true }, // description
-  location: { type: Number, index: true, default: 0 }, // location.  0 = home address, 1 = discuss it with me, 2 = remote
-  author: { type: String, index: true }, // author _id
-  views: { type: Number, index: true, default: 0 }, // views
+  location: { type: String, index: true, default: 0 }, // location
+  author: { type: Object, index: true }, // author info (full name, contact info, avatar)
   rating: { type: Number, index: true, default: 0 }, // rating
-  userimg: { type: String, index: true }, //user pfp
   location: { type: String, index: true } // Coordinates
 })
 const recordSchema = new mongoose.Schema({
