@@ -10,9 +10,10 @@ import { clientAuth } from '../../scripts/server/auth.js';
 import { useState, useEffect, useRef } from 'react';
 import * as Icon from 'react-feather';
 import ProfileNav from '../../components/profilenav.js';
+import { mapboxToken, keywords } from '../../public/vars.js';
 
 let mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
-mapboxgl.accessToken = 'pk.eyJ1IjoiaXJvbmNsYWRkZXYiLCJhIjoiY2wxbnFwa3cyMHg2azNqczk2Ymd0bzd0NSJ9.ufa0YTxIlJfz0UYexTMsbw';
+mapboxgl.accessToken = mapboxToken;
 
 function CheckboxGroup(props) {
   const [fields, setFields] = useState(props.fields.reduce((obj, item) => ({
@@ -56,11 +57,15 @@ function CollapseGroup(props) {
 function SearchEngine(props) {
   const [filter, setFilter] = useState({});
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState('oldest');
   const [showRes, setRes] = useState(false);
+  const [numResults, setResults] = useState(500);
+
   useEffect(() => {
-    console.log(filter)
+    if (filter)
+      props.runSearch(filter);
+      console.log(filter)
   }, [filter])
+
   return (<div className={styles.searchEngine + " " + (props.showSearch ? styles.showSearch : styles.hideSearch)}>
     <div id="geocoder-container" className={styles.searchContainer}></div>
 
@@ -74,30 +79,49 @@ function SearchEngine(props) {
         {showRes && <div className={styles.searchResults}>
           {props.keywords.sort((a, b) => a.localeCompare(b)).filter(x => x.match(new RegExp(search, "ig"))).slice(0, 5).map((keyword) => <div key={keyword} className={styles.searchResult} onClick={e => {
             setSearch(e.target.innerText);
-            props.runSearch(search);
+            setFilter({
+              ...filter,
+              search: e.target.innerText
+            });
             setRes(false);
           }} dangerouslySetInnerHTML={{ __html: keyword.replace(search, `<strong>${search}</strong>`) }}></div>)}
           <div className={styles.searchResult} onClick={() => {
             setSearch(search);
-            props.runSearch(search);
+            setFilter({
+              ...filter,
+              search: search
+            });
             setRes(false)
           }}>filter with {search}...</div>
         </div>}
       </CollapseGroup>
       <CollapseGroup title="Filter">
-        <CheckboxGroup fields={['goods', 'services']} updateFields={setFilter} />
+        <CheckboxGroup fields={['goods', 'services']} updateFields={(f) => {
+          setFilter({
+            ...filter,
+            gs: f.goods && f.services ? "" : (f.goods ? "goods" : (f.services ? "services" : ""))
+          });
+        }} />
       </CollapseGroup>
       <CollapseGroup title="Result Limit">
         <div className={ui.formLabel}>No. of results on the map</div>
-        <input className={ui.input} type="number" value={props.numResults} onChange={e => props.setNumResults(e.target.value)} style={{ width: '100%' }} />
+        <input className={ui.input} type="number" value={numResults} min={1} onChange={e => {
+          setResults(e.target.value)
+          setFilter({
+            ...filter,
+            results: e.target.value
+          })
+        }} style={{ width: '100%' }} />
       </CollapseGroup>
       <CollapseGroup title="Sort By">
-        <select className={ui.buttonAction} value={sort} style={{ width: '100%' }} onChange={e => {
-          setSort(e.target.value);
-          props.setSort(e.target.value);
+        <select className={ui.buttonAction} style={{ width: '100%' }} onChange={e => {
+          setFilter({
+            ...filter,
+            sort: e.target.value
+          })
         }}>
-          <option value="oldest">Oldest</option>
           <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
           <option value="rating">Rating</option>
         </select>
       </CollapseGroup>
@@ -107,9 +131,16 @@ function SearchEngine(props) {
 }
 
 function MapCore(props) {
+  useEffect(() => {
+    if(props.viewItem){
+      const id = props.viewItem;
+    }
+  }, [props.viewItem])
   return (<div className={styles.mapCore}>
     <div id="mapid" className={styles.mapboxGl}></div>
-    <div className={styles.viewPopup + " " + (props.viewItem ? styles.showViewItem : styles.hideViewItem)}></div>
+    <div className={styles.viewPopup + " " + (props.viewItem ? styles.showViewItem : styles.hideViewItem)}>
+
+    </div>
   </div>)
 }
 
@@ -119,25 +150,30 @@ export default function Dashboard(props) {
   const user = JSON.parse(props.currentUser);
 
   const [showSearch, setShowSearch] = useState(true);
-  const [loc, setLoc] = useState({});
   const [viewItem, setViewItem] = useState(false);
-  const [numResults, setNumResults] = useState(50);
+  const [results, setResults] = useState([])
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const _map = useRef(null);
 
   const navigateToPoint = (id) => {
-    //setViewItem(id)
+    setShowSearch(false);
+    setViewItem(id)
   }
 
-  const runSearch = (search) => {
-
-  }
-
-  const setSort = (sort) => {
-
+  const runSearch = async (search) => {
+    let stringifySearch = [];
+    for (let i in search) {
+      stringifySearch.push(`${i}=${search[i]}`)
+    }
+    let data = await fetch(`/api/get/feed?${stringifySearch.join`&`}`).then(r => r.json());
+    setResults(data);
   }
 
   //Create the mapbox map
   useEffect(() => {
-    const map = (new mapboxgl.Map({
+    fetch(`/api/get/feed`).then(r => r.json()).then(setResults)
+    if (_map.current) return;
+    _map.current = (new mapboxgl.Map({
       container: "mapid",
       style: "mapbox://styles/mapbox/light-v10",
       zoom: 0,
@@ -150,139 +186,108 @@ export default function Dashboard(props) {
       ]
     }));
 
+    const map = _map.current;
+
     // Load the marker icon
     map.loadImage('/icons/marker.png', (error, image) => {
       if (error) throw error;
       map.addImage('marker', image);
     });
 
-    // Create the map
-    map.on('load', async () => {
+    map.on("load", () => {
+      setMapLoaded(true)
       map.addSource('data', {
         'type': 'geojson',
         'data': {
           'type': 'FeatureCollection',
-          'features': [
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "1",
-                'icon': 'marker'
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.038659, 38.931567]
-              }
-            },
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "2",
-                'icon': 'marker'
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.003168, 38.894651]
-              }
-            },
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "3",
-                'icon': 'marker'
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.090372, 38.881189]
-              }
-            },
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "4",
-                'icon': 'marker'
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.111561, 38.882342]
-              }
-            },
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "5",
-                'icon': 'marker'
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.052477, 38.943951]
-              }
-            },
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "5",
-                'icon': 'marker'
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.031706, 38.914581]
-              }
-            },
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "6",
-                'icon': 'marker',
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.020945, 38.878241]
-              }
-            },
-            {
-              'type': 'Feature',
-              'properties': {
-                'id': "7",
-                'icon': 'marker'
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.007481, 38.876516]
-              }
-            }
-          ]
-        }
+          'features': []
+        },
+        cluster: true,
+        clusterMaxZoom: 14,
+        clusterRadius: 50
       });
       map.addLayer({
-        'id': 'data',
+        'id': 'data-circles',
+        'type': 'circle',
+        'source': 'data',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#5E8B7E',
+          'circle-radius': 15,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#477568'
+        },
+      });
+      map.addLayer({
+        'id': 'data-contents',
         'type': 'symbol',
         'source': 'data',
-        'layout': {
-          'icon-image': '{icon}',
+
+        filter: ['has', 'point_count'],
+        layout: {
+          "text-field": "{point_count_abbreviated}",
+          "text-font": ["Open Sans Bold"],
+          "text-size": 14,
+        },
+        paint: {
+          "text-color": "white",
+        },
+      });
+      map.addLayer({
+        id: 'unclustered-point',
+        type: 'symbol',
+        source: 'data',
+        filter: ['!', ['has', 'point_count']],
+        layout: {
           'icon-allow-overlap': true,
-          "icon-size": ['interpolate', ['linear', 2], ['zoom'], 0, 0.5, 22, 1]
+          'icon-image': 'marker',
         }
       });
-      map.on('click', 'data', (e) => {
+      map.on('click', 'unclustered-point', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         let id = e.features[0].properties.id;
-        /*while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }*/
+        }
         map.flyTo({
           center: coordinates,
-          zoom: 12.5
         })
         navigateToPoint(id)
+      })
+      map.on('click', 'data-circles', (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ['data-circles']
+        });
+        const clusterId = features[0].properties.cluster_id;
+        map.getSource('data').getClusterExpansionZoom(
+          clusterId,
+          (err, zoom) => {
+            if (err) return;
+
+            map.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            });
+          }
+        );
       });
-      map.on('mouseenter', 'data', () => {
+      map.on('mouseenter', 'data-circles', () => {
         map.getCanvas().style.cursor = 'pointer';
       });
-      map.on('mouseleave', 'data', () => {
+      map.on('mouseleave', 'data-circles', () => {
         map.getCanvas().style.cursor = '';
       });
-    });
+      map.on('mouseenter', 'unclustered-point', () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', 'unclustered-point', () => {
+        map.getCanvas().style.cursor = '';
+      });
+    })
 
     // Define Map Controls
     map.addControl(
@@ -311,6 +316,39 @@ export default function Dashboard(props) {
   }, []);
 
   useEffect(() => {
+    const map = _map.current;
+    /* [
+            {
+              'type': 'Feature',
+              'properties': {
+                'id': "1",
+                'icon': 'marker'
+              },
+              'geometry': {
+                'type': 'Point',
+                'coordinates': [-77.038659, 38.931567]
+              }
+            }
+          ] */
+    if (mapLoaded) {
+      let geojson = {
+        'type': 'FeatureCollection',
+        'features': results.map(r => ({
+          'type': 'Feature',
+          'properties': {
+            'id': r._id,
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': r.location.split`,`.map(Number)
+          }
+        }))
+      };
+      map.getSource('data').setData(geojson);
+    }
+  }, [results, mapLoaded])
+
+  useEffect(() => {
     if (showSearch) {
       document.querySelector(".mapboxgl-ctrl-logo").style.display = "none";
     } else {
@@ -327,8 +365,8 @@ export default function Dashboard(props) {
       <MapCore viewItem={viewItem} setViewItem={setViewItem} />
       <ProfileNav user={user} page={"home"} />
     </div>
-    <SearchEngine showSearch={showSearch} keywords={props.keywords} runSearch={runSearch} numResults={numResults} setNumResults={setNumResults} setSort={setSort} />
-    <div className={styles.showSearchButton + " " + (showSearch ? styles.showSearch : styles.hideSearch)} onClick={() => setShowSearch(!showSearch)}>
+    <SearchEngine showSearch={showSearch} keywords={props.keywords} runSearch={runSearch} />
+    <div className={styles.showSearchButton + " " + (showSearch ? styles.showSearch : styles.hideSearch)} onClick={() => {setShowSearch(!showSearch);if(!showSearch)setViewItem(false)}}>
       <Icon.ChevronRight />
     </div>
   </div>)
@@ -340,52 +378,7 @@ export async function getServerSideProps({ req, res }) {
     return {
       props: {
         currentUser: JSON.stringify(userData),
-        keywords: [
-          "food",
-          "clothing",
-          "electronics",
-          "furniture",
-          "body",
-          "livestock",
-          "toys",
-          "baby",
-          "health",
-          "art",
-          "storage",
-          "other",
-          "construction",
-          "agriculture",
-          "books",
-          "education",
-          "babysitting",
-          "haircuts",
-          "software",
-          "hardware",
-          "delivery",
-          "transportation",
-          "utitlities",
-          "rentals",
-          "design",
-          "maintenance",
-          "cleaning",
-          "mechanics",
-          "carpentry",
-          "plumbing",
-          "tutoring",
-          "crafts",
-          "labor",
-          "painting",
-          "accessories",
-          "tools",
-          "demolition",
-          "repair",
-          "installation",
-          "pets",
-          "medical",
-          "beauty",
-          "garden",
-          "pest control",
-        ],
+        keywords
       }
     }
   } else {

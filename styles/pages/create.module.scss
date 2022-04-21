@@ -7,6 +7,8 @@
 
   &>.bodyCont {
     flex-grow: 1;
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
@@ -29,6 +31,11 @@
   &:focus-within{
     box-shadow: 0 0 0 3px rgba(32, 168, 139, 0.219);
     border-color: var(--accent-primary-stronger) !important;
+  }
+  &::-webkit-scrollbar{
+    width: 3px !important;
+    height: 3px !important;
+    opacity: 0.5;
   }
 }
 .tags{
@@ -78,4 +85,82 @@
   font-size: 15px;
   margin-left: 5px;
   flex-grow: 1;
+}
+.tagAdd{
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  color: white;
+  background: var(--accent-primary-default);
+  text-align: center;
+  border-radius: 50%;
+  font-weight: bold;
+  position: relative;
+  display: block;
+  &:hover{
+    cursor: pointer;
+    background: var(--accent-primary-dimmer);
+  }
+  & > span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 2px));
+  }
+}
+
+.searchResults{
+  background: var(--background-default);
+  border-radius: 5px;
+  border: solid 1px var(--outline-default);
+  border-bottom: none;
+  box-shadow: var(--shadow-default);
+  & > .searchResult{
+    padding: 5px 10px;
+    color: var(--foreground-dimmer);
+    font-size: 14px;
+    border-bottom: solid 1px var(--outline-default);
+    &:hover{
+      background: var(--white-stronger) 1px;
+      cursor: pointer;
+    }
+  }
+}
+
+.searchContainer {
+  margin-bottom: 20px;
+  width: 100%;
+  &>div {
+    width: 100%;
+    outline: none !important;
+    box-shadow: var(--shadow-lightest);
+    border: solid var(--outline-default) 1px;
+    transition: 0.25s;
+    max-width: 100%;
+  }
+
+  &:focus-within > div {
+    box-shadow: 0 0 0 3px rgba(32, 168, 139, 0.219);
+    border-color: var(--accent-primary-stronger) !important;
+    outline: none !important;
+  }
+}
+
+.createForm{
+  background: var(--background-default);
+  border-radius: 10px;
+  border: solid 1px var(--outline-default);
+  box-shadow: var(--shadow-default);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 600px;
+  width: 100%;
+  & > input, & > textarea{
+    width: 100%;
+  }
+  & > .descSmall{
+    font-size: 12px;
+    color: var(--foreground-dimmer);
+    margin-top: 5px;
+  }
 }

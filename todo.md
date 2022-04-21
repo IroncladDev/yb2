@@ -5,3 +5,4 @@
  - search
  - admin
  - 404 page
+ - Reset captcha keys

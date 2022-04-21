@@ -4,6 +4,7 @@ import styles from '../styles/pages/login.module.scss'
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
+import { hcSitekey } from '../public/vars.js';
 
 function TRow(props) {
   const [checked, setChecked] = useState(false);
@@ -179,7 +180,7 @@ export default function Signup() {
               <input className={ui.input + " " + ui.dblock + " " + ui.w100p} placeholder="We won't peek!" name="password2" type="password" id="password2" autoComplete='off' onChange={e => setConf(e.target.value)} value={conf} required={true}/>
 
               <HCaptcha
-                sitekey="124ace2d-8845-47ab-b258-05cf91845687"
+                sitekey={hcSitekey}
                 onVerify={(token, ekey) => handleVerificationSuccess(token, ekey)}
                 ref={captchaRef}
                 size="invisible"

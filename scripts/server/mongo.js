@@ -17,7 +17,7 @@ const serviceSchema = new mongoose.Schema({
   tags: { type: Array, index: true }, // category
   typeBool: { type: Boolean, index: true, default: false }, // f = goods, t = services
   description: { type: String, index: true }, // description
-  location: { type: String, index: true, default: 0 }, // location
+  location: { type: String, index: true }, // location
   author: { type: Object, index: true }, // author info (full name, contact info, avatar)
   rating: { type: Number, index: true, default: 0 }, // rating
   location: { type: String, index: true } // Coordinates

@@ -103,9 +103,10 @@
     outline: none !important;
     box-shadow: var(--shadow-lightest);
     border: solid var(--outline-default) 1px;
+    transition: 0.25s;
   }
 
-  &:focus {
+  &:focus-within > div {
     box-shadow: 0 0 0 3px rgba(32, 168, 139, 0.219);
     border-color: var(--accent-primary-stronger) !important;
     outline: none !important;
@@ -237,3 +238,4 @@
     }
   }
 }
+
