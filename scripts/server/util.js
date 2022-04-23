@@ -24,7 +24,7 @@ export async function sendEmail(to, subject, body) {
   return await fetch("https://api.gmass.co/api/transactional", {
     headers: {
       "Content-Type": "application/json",
-      "X-apikey": "6a600c7e-f0c9-4e33-b4d2-a6d7f196286c",
+      "X-apikey": process.env.GMASS_KEY,
       accept: "*/*"
     },
     method: "POST",
