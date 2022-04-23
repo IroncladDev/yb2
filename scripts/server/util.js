@@ -2,6 +2,7 @@ import requestIp from 'request-ip'
 import rateLimit from 'express-rate-limit'
 import { User } from './mongo.js';
 import crypto from 'crypto'
+import inlineCss from 'inline-css';
 
 export function createPassword(password) {
   let salt = crypto.randomBytes(16).toString('hex');
@@ -15,16 +16,34 @@ export function checkPassword(password, salt, hash1) {
   return hash1 === hash;
 };
 
-export function bs4(string){
+export function bs4(string) {
   return Buffer.from(string).toString('base64')
 }
 
 export async function sendEmail(to, subject, body) {
-  return await fetch("https://email.connerow.dev/send", {
+  return await fetch("https://api.gmass.co/api/transactional", {
+    headers: {
+      "Content-Type": "application/json",
+      "X-apikey": "6a600c7e-f0c9-4e33-b4d2-a6d7f196286c",
+      accept: "*/*"
+    },
+    method: "POST",
+    body: JSON.stringify({
+      "transactionalEmailId": Math.random().toString(36).slice(2),
+      "fromEmail": process.env.EMAIL,
+      "fromName": "YouBarter",
+      "to": to,
+      "cc": "",
+      "bcc": "",
+      "subject": subject,
+      "message": body
+    })
+  }).then(r => r.json())
+  /*return await fetch("https://email.connerow.dev/send", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "accept": "*/*"
+      "accept": "* /*"
     },
     body: JSON.stringify({
       email: process.env.EMAIL,
@@ -34,10 +53,10 @@ export async function sendEmail(to, subject, body) {
       subject,
       body
     })
-  }).then(r => r.json());
+  }).then(r => r.json());*/
 }
-export function classicEmail(title, html) {
-  return `<!DOCTYPE html>
+export async function classicEmail(title, html) {
+  return await inlineCss(`<!DOCTYPE html>
   <html lang="en">
     <head>
     <meta charset="UTF-8">
@@ -72,7 +91,7 @@ export function classicEmail(title, html) {
           line-height: 30px;
           max-width: 90%;
           position: relative;
-          margin: auto;
+          margin: 20px auto;
         }
         .link-btn{
           width: 90%;
@@ -99,7 +118,7 @@ export function classicEmail(title, html) {
           margin: 10px;
         }
         a{
-          color: #5e8b7e;
+          color: #5e8b7e !important;
         }
         .block-image{
           width: 90%;
@@ -123,14 +142,14 @@ export function classicEmail(title, html) {
         <h1 id="title">${title}</h1>
         ${html}
         <hr>
-        <div class="center">&copy; YouBarter® 2021, All Rights Reserved</div>
-        <div class="center"><a href="mailto:contact.youbarter@gmail.com">contact.youbarter@gmail.com</a></div>
+        <div class="center">&copy; YouBarter® 2022, All Rights Reserved</div>
+        <div class="center"><a href="mailto:contact@youbarter.us">contact@youbarter.us</a></div>
       </div>
     </body>
-  </html>`
+  </html>`, { url: "https://youbarter.us" })
 }
-export function vfEmail(link) {
-  return `<!DOCTYPE html>
+export async function vfEmail(link) {
+  return await inlineCss(`<!DOCTYPE html>
   <html lang="en">
     <head>
     <meta charset="UTF-8">
@@ -223,14 +242,14 @@ export function vfEmail(link) {
         </a>
         <p>In case the link didn't work, try <a href="http://${link}">http://${link}</a></p>
         <hr>
-        <div class="center">&copy; YouBarter® 2021, All Rights Reserved</div>
-        <div class="center"><a href="mailto:contact.youbarter@gmail.com">contact.youbarter@gmail.com</a></div>
+        <div class="center">&copy; YouBarter® 2022, All Rights Reserved</div>
+        <div class="center"><a href="mailto:contact@youbarter.us">contact@youbarter.us</a></div>
       </div>
     </body>
-  </html>`
+  </html>`, { url: "https://youbarter.us" })
 }
-export function fgEmail(link) {
-  return `<!DOCTYPE html>
+export async function fgEmail(link) {
+  return await inlineCss(`<!DOCTYPE html>
   <html lang="en">
     <head>
     <meta charset="UTF-8">
@@ -323,11 +342,11 @@ export function fgEmail(link) {
         </a>
         <p>In case the link didn't work, try <a href="http://${link}">http://${link}</a></p>
         <hr>
-        <div class="center">&copy; YouBarter® 2021, All Rights Reserved</div>
-        <div class="center"><a href="mailto:contact.youbarter@gmail.com">contact.youbarter@gmail.com</a></div>
+        <div class="center">&copy; YouBarter® 2022, All Rights Reserved</div>
+        <div class="center"><a href="mailto:contact@youbarter.us">contact@youbarter.us</a></div>
       </div>
     </body>
-  </html>`
+  </html>`, { url: "https://youbarter.us" })
 }
 
 export const limiter = (time, max, handler) => {
@@ -346,7 +365,7 @@ export const limiter = (time, max, handler) => {
   })
 };
 
-export async function userExists(username){
+export async function userExists(username) {
   return !!await User.findOne({ username });
 };
 

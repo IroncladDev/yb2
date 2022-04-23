@@ -13,7 +13,7 @@ app.use(limiter(1000 * 60 * 60, 5, (req, res) => {
 app.post(async (req, res) => {
   let findUser = await User.findOne({email: req.body.email});
   if(findUser){
-    let emailResponse = await sendEmail(req.body.email, "Reset your YouBarter Password", fgEmail(req.headers.host + "/reset?sid=" + findUser.sid));
+    let emailResponse = await sendEmail(req.body.email, "Reset your YouBarter Password", await fgEmail(req.headers.host + "/reset?sid=" + findUser.sid));
     if(emailResponse.success){
       res.json({
         success: true,

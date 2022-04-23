@@ -20,7 +20,7 @@ app.post(async (req, res) => {
         message: "You're already verified!"
       })
     } else {
-      let emailRes = await sendEmail(findUser.email, "YouBarter - Verify your account", vfEmail(req.headers.host + "/api/get/verify?sid=" + findUser.sid));
+      let emailRes = await sendEmail(findUser.email, "YouBarter - Verify your account", await vfEmail(req.headers.host + "/api/get/verify?sid=" + findUser.sid));
       res.json({
         success: emailRes.success,
         message: emailRes.success ? "Email Sent" : "An error occured on our email server.  Please try again or contact us."

@@ -19,6 +19,7 @@ app.post(async (req, res) => {
         tags,
         author: {
           username: user.username,
+          displayName: user.displayName,
           image: user.image
         }
       })

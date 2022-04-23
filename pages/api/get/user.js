@@ -10,6 +10,8 @@ app.get(async (req, res) => {
     delete userQSecured.hash;
     delete userQSecured.sid;
     delete userQSecured._id;
+    delete userQSecured.addr;
+    delete userQSecured.banned;
     res.json(userQSecured);
   } else {
     res.json(false)

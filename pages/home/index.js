@@ -7,10 +7,14 @@ import ui from '../../styles/ui.module.scss';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { clientAuth } from '../../scripts/server/auth.js';
+import { Service } from '../../scripts/server/mongo.js';
 import { useState, useEffect, useRef } from 'react';
 import * as Icon from 'react-feather';
 import ProfileNav from '../../components/profilenav.js';
-import { mapboxToken, keywords } from '../../public/vars.js';
+import { mapboxToken, keywords, hcSitekey } from '../../public/vars.js';
+import DOMPurify from 'isomorphic-dompurify';
+import { marked } from 'marked';
+import Swal from '../../scripts/client/modal';
 
 let mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 mapboxgl.accessToken = mapboxToken;
@@ -38,7 +42,6 @@ function CheckboxGroup(props) {
   </div>)
 }
 
-
 function CollapseGroup(props) {
   const [closed, setClosed] = useState('open' in props ? false : true);
   return (<div className={styles.collapseGroup}>
@@ -63,7 +66,6 @@ function SearchEngine(props) {
   useEffect(() => {
     if (filter)
       props.runSearch(filter);
-      console.log(filter)
   }, [filter])
 
   return (<div className={styles.searchEngine + " " + (props.showSearch ? styles.showSearch : styles.hideSearch)}>
@@ -122,7 +124,6 @@ function SearchEngine(props) {
         }}>
           <option value="newest">Newest</option>
           <option value="oldest">Oldest</option>
-          <option value="rating">Rating</option>
         </select>
       </CollapseGroup>
     </div>
@@ -130,29 +131,184 @@ function SearchEngine(props) {
   </div>)
 }
 
-function MapCore(props) {
+function SrvBox(props) {
+  const [mdtext, setMdText] = useState("")
   useEffect(() => {
-    if(props.viewItem){
-      const id = props.viewItem;
+    function extractContent(s) {
+      var span = document.createElement('span');
+      span.innerHTML = s;
+      return span.textContent || span.innerText;
+    };
+    setMdText(extractContent(DOMPurify.sanitize(marked(props.description))))
+  }, [props.description])
+  return (<div className={styles.srvBox + " " + ui.box8} onClick={props.onClick}>
+    <div className={styles.srvHead}>
+      <img src="/images/user.png" alt="User Profile Image" />
+      <div className={styles.srvBoxInfo}>
+        <h4>{props.title}</h4>
+        <span>@{props.author}</span>
+      </div>
+    </div>
+    <p className={styles.srvBodyDesc}>{mdtext}</p>
+  </div>);
+}
+
+function MapCore(props) {
+  const currentUser = props.currentUser;
+  const [data, setData] = useState({});
+  const [hasFetchedData, setHasFetchedData] = useState(false);
+
+  const alertUserProfile = async (username) => {
+    const user = await fetch("/api/get/user?username=" + username).then(r => r.json());
+    Swal.fire({
+      html: `<div class="${styles.profilePopupFlex}">
+        <img src="${user.image}" alt="User Profile Image" class="${styles.profileImagePopup}"/>
+        <div>
+          <h4>${user.displayName}</h4>
+          <span>@${user.username}</span>
+          <p>${user.bio}</p>
+        </div>
+      </div>`
+    })
+  }
+
+  const deleteListing = async (id) => {
+    const randStr = Math.random().toString(36).slice(2)
+    const { value } = await Swal.fire({
+      title: "Delete Listing?",
+      html: "Are you sure you would like to delete this listing?  This action cannot be reversed.  If so, please type <strong>" + randStr.toLowerCase() + "</strong> to confirm.",
+      input: "text",
+      inputPlaceholder: "Confirm Deletion",
+      showCancelButton: true,
+    })
+    if (value && value.toLowerCase() === randStr.toLowerCase()) {
+      let data = await fetch("/api/post/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*"
+        },
+        body: JSON.stringify({
+          id
+        })
+      }).then(r => r.json());
+      if (data.success) {
+        props.setViewItem(false);
+        props.updateData();
+      } else {
+        Swal.fire({
+          title: "Failed",
+          message: data.message || "We encountered an internal error, it seems.  Please try again or contact support if the problem persists."
+        })
+      }
+    }
+  }
+
+  const warnUser = async (user) =>{
+    const { value } = await Swal.fire({
+      title: "Warn User",
+      html: "Please enter a reason for warning this user",
+      input: "text",
+      inputPlaceholder: "Confirm Deletion",
+      showCancelButton: true,
+    })
+    if (value) {
+      let data = await fetch("/api/post/warn", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*"
+        },
+        body: JSON.stringify({
+          user, reason: value
+        })
+      }).then(r => r.json());
+      if (data.success) {
+        Swal.fire({
+          title: "Warning sent",
+          text: "We've sent that user an email with the reason for the warning",
+        })
+      } else {
+        Swal.fire({
+          title: "Failed",
+          text: data.message || "We encountered an internal error, it seems.  Please try again or contact support if the problem persists."
+        })
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (props.viewItem) {
+      (async () => {
+        if (props.viewItem) {
+          const id = props.viewItem;
+          const srv = await fetch("/api/get/srv?_id=" + id).then(r => r.json());
+          const srvLoc = await fetch("/api/get/srvfind?location=" + srv.location).then(r => r.json());
+          setData({
+            srv, srvLoc
+          })
+        }
+      })();
+      setHasFetchedData(true);
+    } else {
+      setData({})
+      setHasFetchedData(false)
     }
   }, [props.viewItem])
+
+
   return (<div className={styles.mapCore}>
     <div id="mapid" className={styles.mapboxGl}></div>
     <div className={styles.viewPopup + " " + (props.viewItem ? styles.showViewItem : styles.hideViewItem)}>
+      <div className={styles.popupCoreBody}>
+        {(props.viewItem && (data.hasOwnProperty("srv")) && hasFetchedData) && <div>
+          <div className={styles.viewPopupHeader}>
+            <div className={styles.userImageWrapper} onClick={() => alertUserProfile(data.srv.author.username)}>
+              <img src={data.srv.author.image} alt={data.srv.author.username + "'s profile image"} className={styles.userImage} />
+            </div>
+            <div className={styles.userNames} onClick={() => alertUserProfile(data.srv.author.username)}>
+              <div className={styles.userNick}>{data.srv.author.displayName}</div>
+              <div className={styles.userUsername}>{"@"}{data.srv.author.username}</div>
+            </div>
+            <div className={styles.flexGrowHeader}></div>
+            <div className={styles.buttonContainer}>
+              {currentUser.admin && <button className={ui.buttonDanger} onClick={() => warnUser(data.srv.author.username)}>Warn</button>}
+              {((currentUser.username === data.srv.author.username) || currentUser.admin) && <button className={ui.buttonDanger} onClick={() => deleteListing(data.srv._id)}>Delete</button>}
+              {currentUser.username !== data.srv.author.username && <button className={ui.buttonCancel} onClick={() => props.report(data.srv._id)}>Report</button>}
+              {currentUser.username !== data.srv.author.username && <button className={ui.buttonAction} onClick={() => props.offer(data.srv._id)}>Make an Offer</button>}
+              <button className={styles.closeBtn} onClick={() => props.setViewItem(false)}>{"✕"}</button>
+            </div>
+          </div>
+          <div className={styles.popupSrvBody}>
+            <h1>{data.srv.title}</h1>
+            <div className={styles.stats}>
+              <span className={styles.srvType}><Icon.Tag />{" "}{data.srv.typeBool ? "Services" : "Goods"}</span>{" • "}
+              <span className={styles.srvTags}>{data.srv.tags.map(x => <span key={x} className={styles.srvTag}>{"#"}{x}</span>)}</span>
+            </div>
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(data.srv.description)) }} className={styles.descriptionContent}></div>
+          </div>
 
+          {data.srvLoc.length > 1 && <div className={styles.otherLocBody}>
+            <h3>More in this location</h3>
+            <div className={styles.srvBoxList}>
+              {data.srvLoc.filter(x => x._id !== data.srv._id).map(s => <SrvBox description={s.description} key={s._id} title={s.title} author={s.author.username} onClick={() => props.setViewItem(s._id)} />)}
+            </div>
+
+          </div>}
+        </div>}
+      </div>
     </div>
   </div>)
 }
 
-
-
 export default function Dashboard(props) {
   const user = JSON.parse(props.currentUser);
 
-  const [showSearch, setShowSearch] = useState(true);
-  const [viewItem, setViewItem] = useState(false);
+  const [showSearch, setShowSearch] = useState(!(!!props.viewingItem));
+  const [viewItem, setViewItem] = useState(props.viewingItem || false);
   const [results, setResults] = useState([])
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [searchString, setSearchString] = useState([]);
   const _map = useRef(null);
 
   const navigateToPoint = (id) => {
@@ -161,12 +317,83 @@ export default function Dashboard(props) {
   }
 
   const runSearch = async (search) => {
+    setSearchString(search);
     let stringifySearch = [];
     for (let i in search) {
       stringifySearch.push(`${i}=${search[i]}`)
     }
     let data = await fetch(`/api/get/feed?${stringifySearch.join`&`}`).then(r => r.json());
     setResults(data);
+  }
+
+  const updateData = async () => {
+    runSearch(setSearchString)
+  }
+
+  const offer = async (id) => {
+    const { value: offerText } = await Swal.fire({
+      title: "Make an Offer",
+      input: 'textarea',
+      inputPlaceholder: "...",
+      validationMessage: "Minimum length is 32 characters",
+      html: `Enter any information you'd like to share, such as what you'd like to barter, what time would be suitable for you, etc.  <strong>If the creator of this listing wants to barter with you, this conversation will continue via email.</strong>`,
+      showCancelButton: true
+    })
+    if (offerText) {
+      let data = await fetch("/api/post/offer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*"
+        },
+        body: JSON.stringify({
+          value: offerText, id
+        })
+      }).then(r => r.json());
+      if (data.success) {
+        Swal.fire({
+          title: "Sent!",
+          text: "We sent an email to the creator of this listing.  If they accept your offer, you'll be notified via email.  Keep an eye out for an email from " + data.email + "!",
+        })
+      } else {
+        Swal.fire({
+          title: "Failed",
+          text: data.message || "Something went wrong, looks like an internal error on our side.  Please try again later or contact us."
+        })
+      }
+    }
+  }
+
+  const report = async (id) => {
+    const { value: reason } = await Swal.fire({
+      title: "Please provide a reason",
+      text: "Please tell us why this should be taken down/removed.",
+      input: "text",
+      showCancelButton: true
+    })
+    if (reason) {
+      const data = await fetch("/api/post/report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*"
+        },
+        body: JSON.stringify({
+          id, reason
+        }),
+      }).then(r => r.json());
+      if (data.success) {
+        Swal.fire({
+          title: "Success",
+          text: "Your report has been sent.  We'll take care of it as soon as possible."
+        })
+      } else {
+        Swal.fire({
+          title: "Failed",
+          text: data.message || "An internal error occured on our side.  Please try again or email contact@youbarter.us to report this."
+        })
+      }
+    }
   }
 
   //Create the mapbox map
@@ -312,6 +539,10 @@ export default function Dashboard(props) {
     if (document.querySelector(".mapboxgl-ctrl-attrib")) {
       document.querySelector(".mapboxgl-ctrl-attrib").remove();
     }
+    if (document.querySelector(".mapboxgl-ctrl-group")) {
+      console.log("removed")
+      document.querySelector(".mapboxgl-ctrl-group").remove();
+    }
 
   }, []);
 
@@ -362,23 +593,25 @@ export default function Dashboard(props) {
       <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
     </Head>
     <div className={styles.homepageCore}>
-      <MapCore viewItem={viewItem} setViewItem={setViewItem} />
+      <MapCore viewItem={viewItem} setViewItem={setViewItem} currentUser={user} offer={offer} report={report} updateData={updateData} />
       <ProfileNav user={user} page={"home"} />
     </div>
     <SearchEngine showSearch={showSearch} keywords={props.keywords} runSearch={runSearch} />
-    <div className={styles.showSearchButton + " " + (showSearch ? styles.showSearch : styles.hideSearch)} onClick={() => {setShowSearch(!showSearch);if(!showSearch)setViewItem(false)}}>
+    <div className={styles.showSearchButton + " " + (showSearch ? styles.showSearch : styles.hideSearch)} onClick={() => { setShowSearch(!showSearch); if (!showSearch) setViewItem(false) }}>
       <Icon.ChevronRight />
     </div>
   </div>)
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, query }) {
   let userData = await clientAuth(req);
+  let serviceExists = !!(await Service.findOne({ _id: query.srv }));
   if (userData) {
     return {
       props: {
         currentUser: JSON.stringify(userData),
-        keywords
+        keywords,
+        viewingItem: serviceExists ? query.srv : false,
       }
     }
   } else {

@@ -11,7 +11,6 @@ app.get(async (req, res) => {
   ] : [];
   let sortCriteria = { _id: -1 }
   if(sort === "oldest") sortCriteria = { _id: 1 };
-  if(sort === "rating") sortCriteria = { rating: -1 };
   let searchCriteria = {
     $or: orCriteria,
     typeBool: gs === "goods" ? false : true,

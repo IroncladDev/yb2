@@ -24,12 +24,15 @@ export default function Create(props) {
   const captchaRef = useRef(null)
   const formRef = useRef(null);
   const [showRes, setRes] = useState(false);
+  const [docwidth, setDocWidth] = useState(0);
 
   const handleVerificationSuccess = (token, ekey) => {
     setCap(token);
   };
 
   useEffect(() => {
+    setDocWidth(window.innerWidth);
+    window.addEventListener("resize", () => setDocWidth(window.innerWidth))
     if (!document.querySelector(".mapboxgl-ctrl-geocoder")) {
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -61,8 +64,9 @@ export default function Create(props) {
         }}>
           <input type="hidden" name="h-captcha-response" value={cap} />
           <div className={ui.formLabel}>Title</div>
-          <input className={ui.input} name="title" placeholder="Give it a name" required />
+          <input className={ui.input} name="title" minLength={8} maxLength={64} placeholder="Give it a name" required />
           <div className={ui.formLabel}>Description</div>
+          <p className={styles.descSmall}>Be sure to list any additional details.  No need for contact info.</p>
           <textarea className={ui.input} rows={4} name="description" placeholder="Describe your good/service in detail" minLength={32} maxLength={1024} required />
           <div className={ui.formLabel}>Location</div>
           <p className={styles.descSmall}>Enter the location of where the bartering service is at, otherwise, just enter your home address.</p>
@@ -119,6 +123,7 @@ export default function Create(props) {
             sitekey={hcSitekey}
             onVerify={(token, ekey) => handleVerificationSuccess(token, ekey)}
             ref={captchaRef}
+            size={docwidth > 500 ? "normal" : "compact"}
           />
           <button className={ui.buttonAction} onClick={() => { captchaRef.current.execute() }} disabled={cap ? false : true}>Submit</button>
         </form>

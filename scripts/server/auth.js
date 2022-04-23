@@ -4,8 +4,14 @@ import { checkPassword } from './util.js'
 export async function authUser(req, res, next) {
   let findUser = await User.findOne({ sid: req.cookies.sid });
   if (findUser) {
-    if (findUser.verified) {
+    if (findUser.verified && !findUser.banned) {
       next(findUser);
+    } else if(findUser.banned){
+      res.setHeader('Set-Cookie', [`sid=; path=/; Max-Age=${1}`, `verified=; path=/; Max-Age=${1}`]);
+      res.json({
+        success: false,
+        message: "Due to abuse of YouBarter, your account has been banned.  If you would like to appeal, please contact us at contact@youbarter.us.  Thank you."
+      })
     } else {
       res.status(401).json({
         message: "Please verify your email address",
@@ -13,6 +19,7 @@ export async function authUser(req, res, next) {
       })
     }
   } else {
+    res.setHeader('Set-Cookie', [`sid=; path=/; Max-Age=${1}`, `verified=; path=/; Max-Age=${1}`]);
     res.status(404).json({
       message: "Hmmm, we couldn't verify that you exist in the database.  Please log in or sign up.",
       success: false

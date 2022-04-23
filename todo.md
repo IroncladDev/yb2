@@ -1,8 +1,7 @@
- - signup
- - login
- - forgot password page
- - explore
- - search
- - admin
+ - admin stuff on pages
  - 404 page
  - Reset captcha keys
+ - make users fill out settings before bartering
+ - Donation Form Thing
+ - Users can delete their listings
+ - Admin Log Page
