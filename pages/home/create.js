@@ -49,6 +49,7 @@ export default function Create(props) {
   }, [])
 
   return (<div>
+  <Head><title>Create | YouBarter</title></Head>
     <div className={styles.homepageCore}>
       <div className={styles.bodyCont}>
         <form method="POST" action="/api/post/create" className={styles.createForm} ref={formRef} onSubmit={e => {

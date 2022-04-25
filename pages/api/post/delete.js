@@ -1,5 +1,4 @@
 import nc from 'next-connect';
-import { sendEmail, classicEmail, limiter } from '../../../scripts/server/util.js';
 import { authUser } from '../../../scripts/server/auth.js';
 import { Service } from '../../../scripts/server/mongo.js';
 

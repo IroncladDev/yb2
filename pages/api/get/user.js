@@ -9,9 +9,12 @@ app.get(async (req, res) => {
     delete userQSecured.salt;
     delete userQSecured.hash;
     delete userQSecured.sid;
-    delete userQSecured._id;
     delete userQSecured.addr;
     delete userQSecured.banned;
+    delete userQSecured.admin;
+    delete userQSecured.verified;
+    delete userQSecured.email;
+    delete userQSecured.__v;
     res.json(userQSecured);
   } else {
     res.json(false)

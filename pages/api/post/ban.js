@@ -9,14 +9,14 @@ app.post(async (req, res) => {
   authUser(req, res, async (user) => {
     if (user.admin) {
       const userToBeWarned = await User.findOne({ username: req.body.user });
-      let emailCont = await classicEmail(`You Got a Warning`, `<p>An administrator at YouBarter sent you a warning:</p>
+      userToBeWarned.banned = true;
+      await userToBeWarned.save();
+      let emailCont = await classicEmail(`You Have been Banned`, `<p>An administrator has banned you from YouBarter:</p>
     
       <p>"${req.body.reason}"</p>
       
-      <p>Please follow the rules on our site, ignoring any moderator warning will result in the permanent suspension of your youBarter account.</p>
-      
-      <p>Thank you for being a part of our community.  Have a good day.</p>`);
-      await sendEmail(userToBeWarned.email, "A Warning from YouBarter", emailCont);
+      <p>Unfortunately, our decision was final and your offense was too much for us to let you continue using the site.</p>`);
+      await sendEmail(userToBeWarned.email, "YouBarter - You've been banned", emailCont);
       res.json({
         success: true
       })

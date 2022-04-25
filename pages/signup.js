@@ -5,6 +5,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { hcSitekey } from '../public/vars.js';
+import getCountry from '../scripts/client/country'
 
 function TRow(props) {
   const [checked, setChecked] = useState(false);
@@ -61,9 +62,9 @@ function Tos(props) {
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={0} setTos={props.setTos}>1. Keep everything on the website clean.  Please do not post inappropriate content, bad words, or post illegal goods/services.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={1} setTos={props.setTos}>2. Be honest.  This platform is built on integrity and honesty.  If someone reports you for not keeping a promise or refusing to do as you&apos;ve posted on the site, we will remove your listing.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={2} setTos={props.setTos}>3. We are not responsible for anyone not doing what they say.  The furthest action we will take is unlisting the person&apos;s service and/or removing them from the site.  We will not refund, pay, or take responsibility for anything you might have lost.</TRow>
-    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={3} setTos={props.setTos}>4. All users under the age of thirteen caught using the site will be removed.  You must be at least thirteen years old to use this platform.</TRow>
-    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={4} setTos={props.setTos}>5. Agree to our <a href="/terms" target="_blank" rel="noreferrer">Terms</a> and <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> before you proceed.</TRow>
-    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={5} setTos={props.setTos}>6. Use common sense - just because something isn&apos;t listed here doesn&apos;t mean you can break it.  Don&apos;t attempt to find a flaw in the wording and use it to your advantage.</TRow>
+    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={3} setTos={props.setTos}>4. Agree to our <a href="/terms" target="_blank" rel="noreferrer">Terms</a> and <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> before you proceed.</TRow>
+    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={4} setTos={props.setTos}>5. Use common sense - just because something isn&apos;t listed here doesn&apos;t mean you can break it.  Don&apos;t attempt to find a flaw in the wording and use it to your advantage.</TRow>
+    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={5} setTos={props.setTos}>6. Thanks for joining us, please check this rule to continue/</TRow>
   </div>)
 }
 
@@ -83,9 +84,20 @@ export default function Signup() {
     setCap(token);
     setTos(true);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let errs = [...errors];
+
+    let userExists = (await fetch("/api/get/user?username=" + username).then(r => r.json())) || (await fetch("/api/get/user?email=" + username).then(r => r.json()));
+
+    if(userExists){
+      errs.push("Username or email already exists");
+    }
+
+    if(getCountry() !== "United States of America"){
+      errs.push("YouBarter is currently only accessible and usable in the United States of America.")
+    }
+
     if(username.length < 3){
       errs.push("Username must be at least three characters");
     }else{

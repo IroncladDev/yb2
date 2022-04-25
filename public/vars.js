@@ -1,5 +1,5 @@
-export const hcSitekey = "10000000-ffff-ffff-ffff-000000000001";
-//124ace2d-8845-47ab-b258-05cf91845687
+export const hcSitekey = "124ace2d-8845-47ab-b258-05cf91845687";
+//10000000-ffff-ffff-ffff-000000000001
 export const mapboxToken = "pk.eyJ1IjoiaXJvbmNsYWRkZXYiLCJhIjoiY2wxbnFwa3cyMHg2azNqczk2Ymd0bzd0NSJ9.ufa0YTxIlJfz0UYexTMsbw";
 
 export const keywords = [

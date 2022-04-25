@@ -2,11 +2,11 @@ import { User } from './mongo.js';
 import { checkPassword } from './util.js'
 
 export async function authUser(req, res, next) {
-  let findUser = await User.findOne({ sid: req.cookies.sid });
+  let findUser = await User.findOne({ sid: req.cookies.sid }, { salt: 0, hash: 0, sid: 0, __v: 0, addr: 0 });
   if (findUser) {
     if (findUser.verified && !findUser.banned) {
       next(findUser);
-    } else if(findUser.banned){
+    } else if (findUser.banned) {
       res.setHeader('Set-Cookie', [`sid=; path=/; Max-Age=${1}`, `verified=; path=/; Max-Age=${1}`]);
       res.json({
         success: false,
@@ -28,19 +28,27 @@ export async function authUser(req, res, next) {
 };
 
 export async function authenticate(login, password) {
-  let findUser = await User.findOne({ $or: [{username: login}, {email: login}] });
+  let findUser = await User.findOne({ $or: [{ username: login }, { email: login }] }, { sid: 1 });
   return checkPassword(password, findUser.salt, findUser.hash) ? findUser.sid : false;
 }
 
-export async function clientAuth(req){
-  let findUser = await User.findOne({sid: req.cookies.sid});
-  if(findUser){
-    if(findUser.verified){
-      return findUser
-    }else{
+export async function clientAuth(req) {
+  let findUser = await User.findOne({ sid: req.cookies.sid });
+  if (findUser) {
+    if (findUser.verified) {
+      let userQSecured = findUser.toObject();
+      delete userQSecured.salt;
+      delete userQSecured.hash;
+      delete userQSecured.sid;
+      delete userQSecured.addr;
+      delete userQSecured.banned;
+      delete userQSecured.verified;
+      delete userQSecured.__v;
+      return userQSecured
+    } else {
       return false;
     }
-  }else{
+  } else {
     return false;
   }
 }

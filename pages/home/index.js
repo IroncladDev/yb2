@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head';
-import Link from 'next/link';
-import router from 'next/router';
 import styles from '../../styles/pages/home.module.scss';
 import ui from '../../styles/ui.module.scss';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -66,6 +64,7 @@ function SearchEngine(props) {
   useEffect(() => {
     if (filter)
       props.runSearch(filter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
   return (<div className={styles.searchEngine + " " + (props.showSearch ? styles.showSearch : styles.hideSearch)}>
@@ -204,12 +203,12 @@ function MapCore(props) {
     }
   }
 
-  const warnUser = async (user) =>{
+  const warnUser = async (user) => {
     const { value } = await Swal.fire({
       title: "Warn User",
       html: "Please enter a reason for warning this user",
       input: "text",
-      inputPlaceholder: "Confirm Deletion",
+      inputPlaceholder: "Reason for Warning",
       showCancelButton: true,
     })
     if (value) {
@@ -227,6 +226,39 @@ function MapCore(props) {
         Swal.fire({
           title: "Warning sent",
           text: "We've sent that user an email with the reason for the warning",
+        })
+      } else {
+        Swal.fire({
+          title: "Failed",
+          text: data.message || "We encountered an internal error, it seems.  Please try again or contact support if the problem persists."
+        })
+      }
+    }
+  }
+
+  const banUser = async (user) => {
+    const { value } = await Swal.fire({
+      title: "Ban User",
+      html: "Warning!  This user will never be able to access the site again from that device!!  Are you sure you would like to ban them?  If so, please enter a reason.",
+      input: "text",
+      inputPlaceholder: "Reason for Ban",
+      showCancelButton: true,
+    })
+    if (value) {
+      let data = await fetch("/api/post/ban", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*"
+        },
+        body: JSON.stringify({
+          user, reason: value
+        })
+      }).then(r => r.json());
+      if (data.success) {
+        Swal.fire({
+          title: "Banned",
+          text: "That user has been removed from the site.",
         })
       } else {
         Swal.fire({
@@ -263,19 +295,15 @@ function MapCore(props) {
       <div className={styles.popupCoreBody}>
         {(props.viewItem && (data.hasOwnProperty("srv")) && hasFetchedData) && <div>
           <div className={styles.viewPopupHeader}>
-            <div className={styles.userImageWrapper} onClick={() => alertUserProfile(data.srv.author.username)}>
+            <div className={styles.userImageWrapper}>
               <img src={data.srv.author.image} alt={data.srv.author.username + "'s profile image"} className={styles.userImage} />
             </div>
-            <div className={styles.userNames} onClick={() => alertUserProfile(data.srv.author.username)}>
+            <div className={styles.userNames}>
               <div className={styles.userNick}>{data.srv.author.displayName}</div>
-              <div className={styles.userUsername}>{"@"}{data.srv.author.username}</div>
+              <div className={styles.userUsername}>{data.srv.author.bio || data.srv.author.displayName + " has no bio"}</div>
             </div>
             <div className={styles.flexGrowHeader}></div>
             <div className={styles.buttonContainer}>
-              {currentUser.admin && <button className={ui.buttonDanger} onClick={() => warnUser(data.srv.author.username)}>Warn</button>}
-              {((currentUser.username === data.srv.author.username) || currentUser.admin) && <button className={ui.buttonDanger} onClick={() => deleteListing(data.srv._id)}>Delete</button>}
-              {currentUser.username !== data.srv.author.username && <button className={ui.buttonCancel} onClick={() => props.report(data.srv._id)}>Report</button>}
-              {currentUser.username !== data.srv.author.username && <button className={ui.buttonAction} onClick={() => props.offer(data.srv._id)}>Make an Offer</button>}
               <button className={styles.closeBtn} onClick={() => props.setViewItem(false)}>{"✕"}</button>
             </div>
           </div>
@@ -286,6 +314,11 @@ function MapCore(props) {
               <span className={styles.srvTags}>{data.srv.tags.map(x => <span key={x} className={styles.srvTag}>{"#"}{x}</span>)}</span>
             </div>
             <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(data.srv.description)) }} className={styles.descriptionContent}></div>
+            {((currentUser.username === data.srv.author.username) || currentUser.admin) && <button className={ui.buttonDanger} onClick={() => deleteListing(data.srv._id)}>Delete</button>}
+            {currentUser.admin && <button className={ui.buttonDanger} onClick={() => warnUser(data.srv.author.username)}>Warn</button>}
+            {(currentUser.admin) && <button className={ui.buttonDanger} onClick={() => banUser(data.srv.author.username)}>Ban User</button>}
+            {currentUser.username !== data.srv.author.username && <button className={ui.buttonCancel} onClick={() => props.report(data.srv._id)}>Report</button>}
+            {currentUser.username !== data.srv.author.username && <button className={ui.buttonAction} onClick={() => props.offer(data.srv._id)}>Make an Offer</button>}
           </div>
 
           {data.srvLoc.length > 1 && <div className={styles.otherLocBody}>

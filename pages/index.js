@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
-import Image from 'next/image'
+import { clientAuth } from '../scripts/server/auth.js';
 import styles from '../styles/pages/index.module.scss'
 import ui from '../styles/ui.module.scss'
 import Nav from '../components/nav'
@@ -146,4 +146,18 @@ export default function Home() {
       </div>
     </>
   )
+}
+export async function getServerSideProps({ req, query }) {
+  let userData = await clientAuth(req);
+  if (userData) {
+    return {
+      redirect: {
+        destination: "/home"
+      }
+    }
+  } else {
+    return {
+      props: {}
+    }
+  }
 }

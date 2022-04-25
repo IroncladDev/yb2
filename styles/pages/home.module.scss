@@ -278,7 +278,6 @@
   &>.userImageWrapper {
     width: 50px;
     height: 50px;
-    cursor: pointer;
     &>img {
       width: 100%;
       height: 100%;
@@ -288,7 +287,6 @@
   }
 
   &>.userNames {
-    cursor: pointer;
     margin-left: 10px;
 
     &>.userNick {
@@ -377,6 +375,15 @@
 
 .popupSrvBody {
   margin-top: 25px;
+  & > button{
+    margin: 0 5px;
+  }
+  & > button:first-of-type{
+    margin-left: 0;
+  }
+  & > button:last-of-type{
+    margin-right: 0;
+  }
 }
 
 .srvBoxList {

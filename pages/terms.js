@@ -13,8 +13,7 @@ export default function About() {
       <Nav />
       <div className={ui.relcont} style={{ background: 'var(--background-default)' }}>
         <div className={ui.mw800 + " " + ui.centerx + " " + ui.relative} style={{ padding: '15vh 0' }}>
-          <h1 style={{paddingBottom: 20}}>Terms and Conditions</h1>
-          <h2>Welcome to Youbarter!</h2>
+          <h1 style={{ paddingBottom: 20 }}>Terms and Conditions</h1>
           <p>
             These terms and conditions outline the rules and regulations for the use of Youbarter&apos;s Website, located at <Link href="/" passHref><a>https://youbarter.us</a></Link>.
           </p>
@@ -22,6 +21,8 @@ export default function About() {
             By accessing this website, we assume you accept these terms and conditions. Do not continue to use Youbarter if
             you do not agree to take all of the terms and conditions stated on this page.
           </p>
+          <h2>Service</h2>
+          <p>We provide users with a master list of those in the United States of America who are willing to barter with others.</p>
           <h2>Cookies</h2>
           <p>
             The website uses cookies to help personalize your online experience. By accessing Youbarter, you agreed to use the
@@ -33,12 +34,7 @@ export default function About() {
             server in the domain that issued the cookie to you.
           </p>
           <p>
-            We may use cookies to collect, store, and track information for statistical or marketing purposes to operate our
-            website. You have the ability to accept or decline optional Cookies. There are some required Cookies that are
-            necessary for the operation of our website. These cookies do not require your consent as they always work. Please
-            keep in mind that by accepting required Cookies, you also accept third-party Cookies, which might be used via
-            third-party provided services if you use such services on our website, for example, a video display window
-            provided by third parties and integrated into our website.
+            The only cookie we use is a session cookie. This cookie determines if you are logged into your account.  We do not store any cookies on your device to improve your browsing experience or to collect personal information.  Please keep in mind that by accepting required Cookies, you also accept third-party Cookies, which might be used via third-party provided services if you use such serices on our website, for example, a video display window provided by third parties and integrated into our website.
           </p>
           <h2>License</h2>
           <p>
@@ -50,10 +46,16 @@ export default function About() {
             <h2>You must not</h2>
           </p>
           <p>
-            Copy or republish material from Youbarter
-            Sell, rent, or sub-license material from Youbarter
-            Reproduce, duplicate or copy material from Youbarter
-            Redistribute content from Youbarter
+            <ol>
+              <li>Transmit content that may be harmful to minors</li>
+              <li>Impersonate another person (via the use of an email address or otherwise) or otherwise misrepresent yourself or the source of any email</li>
+              <li>Promote or encourage illegal activity</li>
+              <li>Copy or republish material from Youbarter</li>
+              <li>Sell, rent, or sub-license material from Youbarter</li>
+              <li>Reproduce, duplicate or copy material from Youbarter
+                Redistribute content from Youbarter</li>
+              <li>Use YouBarter to collect and/or sell personal information such as email addresses or other contact data</li>
+            </ol>
             This Agreement shall begin on the date hereof.
           </p>
           <p>
@@ -61,21 +63,27 @@ export default function About() {
             the website.  We try to keep the content on the site clean.  If there are any who post inappropriate and/or offensive content, please take your time to report the user for us so that we can remove the post from the site.
           </p>
           <p>
-            Youbarter reserves the right to monitor all Comments and remove any Comments that can be considered inappropriate,
+            Youbarter reserves the right to monitor all Listings and remove any Listings that can be considered inappropriate,
             offensive, or causes breach of these Terms and Conditions.
           </p>
           <h2>You warrant and represent that:</h2>
           <p>
-            You are entitled to post the Comments on our website and have all necessary licenses and consents to do so;
-            The Comments do not invade any intellectual property right, including without limitation copyright, patent, or
+            You are entitled to post the Listings on our website and have all necessary licenses and consents to do so;
+            The Listings do not invade any intellectual property right, including without limitation copyright, patent, or
             trademark of any third party;
-            The Comments do not contain any defamatory, libelous, offensive, indecent, or otherwise unlawful material, which
+            The Listings do not contain any defamatory, libelous, offensive, indecent, or otherwise unlawful material, which
             is an invasion of privacy.
-            The Comments will not be used to solicit or promote business or custom or present commercial activities or
+            The Listings will not be used to solicit or promote business or custom or present commercial activities or
             unlawful activity.
             You hereby grant Youbarter a non-exclusive license to use, reproduce, edit and authorize others to use, reproduce
-            and edit any of your Comments in any and all forms, formats, or media.
+            and edit any of your Listings in any and all forms, formats, or media.
           </p>
+          <h2>Accounts</h2>
+          <p>By creating an account on YouBarter, you represent and warrant that you are above the age of 13, and that the information you provide us is accurate, complete, and current at all times.  Inaccurate, incomplete, or obsolete information may result in the immediate termination of your account on the Service.</p>
+
+          <p>You may not use as a username the name of another person or entity or that is not lawfully available for use, a name or trademark that is subject to any rights of another person or entity other than you, without appropriate authorization. You may not use as a username any name that is offensive, vulgar or obscene.</p>
+
+          <p>YouBarter may terminate a user&apos;s access to the service if the user continues to violate the terms of service or creates/performs an action such as breaking the law or promoting/posting/uploading prohibited content.</p>
           <h2>Hyperlinking to our Content:</h2>
           <p>The following organizations may link to our Website without prior written approval:</p>
 
@@ -154,6 +162,8 @@ export default function About() {
             nor do we promise to ensure that the website remains available or that the material on the website is kept up to
             date.
           </p>
+          <h2>HCaptcha</h2>
+          <p>We use the hCaptcha anti-bot service (hereinafter &quot;hCaptcha&quot;) on our website. This service is provided by Intuition Machines, Inc., a Delaware US Corporation (&quot;IMI&quot;). hCaptcha is used to check whether the data entered on our website (such as on a login page or contact form) has been entered by a human or by an automated program. To do this, hCaptcha analyzes the behavior of the website or mobile app visitor based on various characteristics. This analysis starts automatically as soon as the website or mobile app visitor enters a part of the website or app with hCaptcha enabled. For the analysis, hCaptcha evaluates various information (e.g. IP address, how long the visitor has been on the website or app, or mouse movements made by the user). The data collected during the analysis will be forwarded to IMI. hCaptcha analysis in the &quot;invisible mode&quot; may take place completely in the background. Website or app visitors are not advised that such an analysis is taking place if the user is not shown a challenge. Data processing is based on Art. 6(1)(f) of the GDPR (DSGVO): the website or mobile app operator has a legitimate interest in protecting its site from abusive automated crawling and spam. IMI acts as a &quot;data processor&quot; acting on behalf of its customers as defined under the GDPR, and a &quot;service provider&quot; for the purposes of the California Consumer Privacy Act (CCPA). For more information about hCaptcha and IMI&apos;s privacy policy and terms of use, please visit the following links: <a href="https://hcaptcha.com/privacy/" target="_blank" rel="noreferrer">https://hcaptcha.com/privacy/</a> and <a href="https://hcaptcha.com/terms" target="_blank" rel="noreferrer">https://hcaptcha.com/terms</a>.</p>
           <h2>Disclaimer:</h2>
           <p>
             To the maximum extent permitted by applicable law, we exclude all representations, warranties, and conditions

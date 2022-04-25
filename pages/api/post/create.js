@@ -20,6 +20,7 @@ app.post(async (req, res) => {
         author: {
           username: user.username,
           displayName: user.displayName,
+          bio: user.bio,
           image: user.image
         }
       })

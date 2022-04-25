@@ -365,7 +365,3 @@ export const limiter = (time, max, handler) => {
   })
 };
 
-export async function userExists(username) {
-  return !!await User.findOne({ username });
-};
-

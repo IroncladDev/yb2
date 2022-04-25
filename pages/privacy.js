@@ -13,13 +13,11 @@ export default function About() {
       <div className={ui.relcont} style={{ background: 'var(--background-default)' }}>
         <div className={ui.mw800 + " " + ui.centerx + " " + ui.relative} style={{padding: '15vh 0'}}>
           <h1>Privacy Policy</h1>
-          <p>Last updated: March 15, 2022</p>
+          <p>Last updated: Apr 25, 2022</p>
           <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your
             information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
           <p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection
-            and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help
-            of the <a href="https://www.freeprivacypolicy.com/free-privacy-policy-generator/" target="_blank" rel="noreferrer">Privacy Policy
-              Generator</a>.</p>
+            and use of information in accordance with this Privacy Policy.</p>
           <h1>Interpretation and Definitions</h1>
           <h2>Interpretation</h2>
           <p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The
@@ -85,12 +83,6 @@ export default function About() {
               <p>First name and last name</p>
             </li>
             <li>
-              <p>Phone number</p>
-            </li>
-            <li>
-              <p>Address, State, Province, ZIP/Postal code, City</p>
-            </li>
-            <li>
               <p>Usage Data</p>
             </li>
           </ul>
@@ -123,11 +115,6 @@ export default function About() {
                 rel="external nofollow noopener noreferrer"
                 target="_blank">https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_</a>
             </li>
-            <li><strong>Web Beacons.</strong> Certain sections of our Service and our emails may contain small electronic
-              files known as web beacons (also referred to as clear gifs, pixel tags, and single-pixel gifs) that permit the
-              Company, for example, to count users who have visited those pages or opened an email and for other related
-              website statistics (for example, recording the popularity of a certain section and verifying system and server
-              integrity).</li>
           </ul>
           <p>Cookies can be &quot;Persistent&quot; or &quot;Session&quot; Cookies. Persistent Cookies remain on Your personal
             computer or mobile device when You go offline, while Session Cookies are deleted as soon as You close Your web
@@ -144,12 +131,6 @@ export default function About() {
                 You to use some of its features. They help to authenticate users and prevent fraudulent use of user accounts.
                 Without these Cookies, the services that You have asked for cannot be provided, and We only use these Cookies
                 to provide You with those services.</p>
-            </li>
-            <li>
-              <p><strong>Cookies Policy / Notice Acceptance Cookies</strong></p>
-              <p>Type: Persistent Cookies</p>
-              <p>Administered by: Us</p>
-              <p>Purpose: These Cookies identify if users have accepted the use of cookies on the Website.</p>
             </li>
             <li>
               <p><strong>Functionality Cookies</strong></p>
@@ -185,18 +166,7 @@ export default function About() {
                 updates, when necessary or reasonable for their implementation.</p>
             </li>
             <li>
-              <p><strong>To provide You</strong> with news, special offers and general information about other goods, services
-                and events which we offer that are similar to those that you have already purchased or enquired about unless
-                You have opted not to receive such information.</p>
-            </li>
-            <li>
               <p><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</p>
-            </li>
-            <li>
-              <p><strong>For business transfers:</strong> We may use Your information to evaluate or conduct a merger,
-                divestiture, restructuring, reorganization, dissolution, or other sale or transfer of some or all of Our
-                assets, whether as a going concern or as part of bankruptcy, liquidation, or similar proceeding, in which
-                Personal Data held by Us about our Service users is among the assets transferred.</p>
             </li>
             <li>
               <p><strong>For other purposes</strong>: We may use Your information for other purposes, such as data analysis,
@@ -206,17 +176,6 @@ export default function About() {
           </ul>
           <p>We may share Your personal information in the following situations:</p>
           <ul>
-            <li><strong>With Service Providers:</strong> We may share Your personal information with Service Providers to
-              monitor and analyze the use of our Service, to contact You.</li>
-            <li><strong>For business transfers:</strong> We may share or transfer Your personal information in connection
-              with, or during negotiations of, any merger, sale of Company assets, financing, or acquisition of all or a
-              portion of Our business to another company.</li>
-            <li><strong>With Affiliates:</strong> We may share Your information with Our affiliates, in which case we will
-              require those affiliates to honor this Privacy Policy. Affiliates include Our parent company and any other
-              subsidiaries, joint venture partners or other companies that We control or that are under common control with
-              Us.</li>
-            <li><strong>With business partners:</strong> We may share Your information with Our business partners to offer You
-              certain products, services or promotions.</li>
             <li><strong>With other users:</strong> when You share personal information or otherwise interact in the public
               areas with other users, such information may be viewed by all users and may be publicly distributed outside.
             </li>
@@ -243,9 +202,6 @@ export default function About() {
             country unless there are adequate controls in place including the security of Your data and other personal
             information.</p>
           <h2>Disclosure of Your Personal Data</h2>
-          <h3>Business Transactions</h3>
-          <p>If the Company is involved in a merger, acquisition or asset sale, Your Personal Data may be transferred. We will
-            provide notice before Your Personal Data is transferred and becomes subject to a different Privacy Policy.</p>
           <h3>Law enforcement</h3>
           <p>Under certain circumstances, the Company may be required to disclose Your Personal Data if required to do so by
             law or in response to valid requests by public authorities (e.g. a court or a government agency).</p>
@@ -277,7 +233,7 @@ export default function About() {
           <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are
             effective when they are posted on this page.</p>
           <h1>Contact Us</h1>
-          <p>If you have any questions about this Privacy Policy, You can contact us at <a href="mailto:contact.youbarter@gmail.com">contact.youbarter@gmail.com</a></p>
+          <p>If you have any questions about this Privacy Policy, You can contact us at <a href="mailto:contact@youbarter.us">contact@youbarter.us</a></p>
         </div>
       </div>
       <Footer background="var(--background-default)" />

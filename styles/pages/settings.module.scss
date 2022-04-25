@@ -1,0 +1,73 @@
+.homepageCore {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+
+  align-items: stretch;
+
+  &>.bodyCont {
+    flex-grow: 1;
+    height: 100%;
+    overflow-y: auto;
+  }
+}
+
+.profileImageOverlay{
+  position: relative;
+  background-size: cover;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: solid var(--white-stronger) 2px;
+  background-position: center;
+  & > .profileImageLoader{
+    position: absolute;
+    top: 12.5px;
+    left: 12.5px;
+    width: 50px;
+    height: 50px;
+    border: solid transparent 5px;
+    border-top: solid var(--accent-primary-stronger) 5px;
+    animation: load 0.5s infinite linear;
+    border-radius: 50%;
+  }
+}
+@keyframes load{
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+.formElement{
+  margin: 10px 0;
+  position: relative;
+  left: 50%;
+  transform: translatex(-50%);
+  max-width: 400px;
+}
+
+.formFlexHead{
+  display: flex;
+  & > .formFlexHeadLeft{
+    width: 85px;
+    padding: 0 5px;
+  }
+  & > .formFlexHeadRight{
+    padding: 0 5px;
+    flex-grow: 1;
+    & > input, & > textarea{
+      width: 100%;
+    }
+  }
+}
+
+.delForm{
+  display: flex;
+  flex-direction: column;
+  border: solid var(--accent-negative-dimmer) 1px;
+  box-shadow: inset 0 0 0 5px var(--accent-negative-overlay);
+  & > input{
+    width: 100%;
+  }
+
+}

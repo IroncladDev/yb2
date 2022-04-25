@@ -1,6 +1,7 @@
 import '../styles/globals.scss'
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
+import NextNProgress from 'nextjs-progressbar';
 
 function MyApp({ Component, pageProps }) {
   const [dark, setMode] = useState(false)
@@ -28,6 +29,7 @@ function MyApp({ Component, pageProps }) {
       <meta property="og:image:height" content="1600" />
       <meta name="copyright" content="2022"></meta>
     </Head>
+    <NextNProgress options={{showSpinner: false}} color="var(--accent-primary-default)"/>
     <Component {...pageProps} />
   </>)
 }

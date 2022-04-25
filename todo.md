@@ -1,7 +1,3 @@
- - admin stuff on pages
- - 404 page
  - Reset captcha keys
- - make users fill out settings before bartering
- - Donation Form Thing
- - Users can delete their listings
- - Admin Log Page
+ - Run next build locally
+ - delete todo.md
