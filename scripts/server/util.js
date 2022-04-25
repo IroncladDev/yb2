@@ -39,21 +39,6 @@ export async function sendEmail(to, subject, body) {
       "message": body
     })
   }).then(r => r.json())
-  /*return await fetch("https://email.connerow.dev/send", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "accept": "* /*"
-    },
-    body: JSON.stringify({
-      email: process.env.EMAIL,
-      password: process.env.GP,
-      auth: process.env.EMAIL_TOKEN,
-      to,
-      subject,
-      body
-    })
-  }).then(r => r.json());*/
 }
 export async function classicEmail(title, html) {
   return await inlineCss(`<!DOCTYPE html>

@@ -28,7 +28,7 @@ export async function authUser(req, res, next) {
 };
 
 export async function authenticate(login, password) {
-  let findUser = await User.findOne({ $or: [{ username: login }, { email: login }] }, { sid: 1 });
+  let findUser = await User.findOne({ $or: [{ username: login }, { email: login }] });
   return checkPassword(password, findUser.salt, findUser.hash) ? findUser.sid : false;
 }
 
