@@ -142,7 +142,7 @@ function SrvBox(props) {
   }, [props.description])
   return (<div className={styles.srvBox + " " + ui.box8} onClick={props.onClick}>
     <div className={styles.srvHead}>
-      <img src="/images/user.png" alt="User Profile Image" />
+      <img src={props.image} alt="User Profile Image" />
       <div className={styles.srvBoxInfo}>
         <h4>{props.title}</h4>
         <span>@{props.author}</span>
@@ -324,7 +324,7 @@ function MapCore(props) {
           {data.srvLoc.length > 1 && <div className={styles.otherLocBody}>
             <h3>More in this location</h3>
             <div className={styles.srvBoxList}>
-              {data.srvLoc.filter(x => x._id !== data.srv._id).map(s => <SrvBox description={s.description} key={s._id} title={s.title} author={s.author.username} onClick={() => props.setViewItem(s._id)} />)}
+              {data.srvLoc.filter(x => x._id !== data.srv._id).map(s => <SrvBox image={s.author.image} description={s.description} key={s._id} title={s.title} author={s.author.username} onClick={() => props.setViewItem(s._id)} />)}
             </div>
 
           </div>}

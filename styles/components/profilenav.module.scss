@@ -42,3 +42,23 @@
     color: var(--foreground-dimmest);
   }
 }
+
+.pulseanim {
+  border-radius: 50%;
+  animation: pulseshadow 1s infinite;
+}
+
+@keyframes pulseshadow {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-primary-default);
+    border-color: var(--accent-primary-strongest);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}

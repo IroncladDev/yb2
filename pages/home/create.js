@@ -21,6 +21,8 @@ export default function Create(props) {
   let [tags, setTags] = useState([])
   let [tag, setTag] = useState("")
   const [cap, setCap] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const captchaRef = useRef(null)
   const formRef = useRef(null);
   const [showRes, setRes] = useState(false);
@@ -28,6 +30,7 @@ export default function Create(props) {
 
   const handleVerificationSuccess = (token, ekey) => {
     setCap(token);
+    formRef.current.submit();
   };
 
   useEffect(() => {
@@ -53,22 +56,26 @@ export default function Create(props) {
     <div className={styles.homepageCore}>
       <div className={styles.bodyCont}>
         <form method="POST" action="/api/post/create" className={styles.createForm} ref={formRef} onSubmit={e => {
+          e.preventDefault();
           if (tags.length === 0) {
-            e.preventDefault();
             Swal.fire("Error", "Please add at least one tag to your good or service so that others can find it.");
           } else if (!result) {
-            e.preventDefault();
             Swal.fire("Error", "Please select a location for your good or service or it will not show up on the map");
-          } else {
+          } else if(description.length < 32){
+            Swal.fire("Error", "Description must be at least 32 characters")
+          }
+          
+          if(result && tags.length > 0 && title.length >= 8 && description.length >= 32) {
+            console.log("All good")
             captchaRef.current.execute();
           }
         }}>
           <input type="hidden" name="h-captcha-response" value={cap} />
           <div className={ui.formLabel}>Title</div>
-          <input className={ui.input} name="title" minLength={8} maxLength={64} placeholder="Give it a name" required />
+          <input className={ui.input} name="title" minLength={8} maxLength={64} placeholder="Give it a name" value={title} onChange={e => setTitle(e.target.value)} required />
           <div className={ui.formLabel}>Description</div>
           <p className={styles.descSmall}>Be sure to list any additional details.  No need for contact info.</p>
-          <textarea className={ui.input} rows={4} name="description" placeholder="Describe your good/service in detail" minLength={32} maxLength={1024} required />
+          <textarea className={ui.input} rows={4} name="description" placeholder="Describe your good/service in detail" minLength={32} maxLength={1024} value={description} onChange={e => setDescription(e.target.value)} required />
           <div className={ui.formLabel}>Location</div>
           <p className={styles.descSmall}>Enter the location of where the bartering service is at, otherwise, just enter your home address.</p>
           <div id="geocoder-container" className={styles.searchContainer}></div>
@@ -118,15 +125,15 @@ export default function Create(props) {
             <option value="good">Good(s)</option>
             <option value="service">Service(s)</option>
           </select>
-          <div className={ui.formLabel}>Captcha</div>
-          <p className={styles.descSmall}>Please prove that you are of flesh and bones</p>
+          <div className={ui.formLabel}>Create Listing</div>
+          <p className={styles.descSmall}>Double-check everything and go!</p>
           <HCaptcha
             sitekey={hcSitekey}
             onVerify={(token, ekey) => handleVerificationSuccess(token, ekey)}
             ref={captchaRef}
-            size={docwidth > 500 ? "normal" : "compact"}
+            size="invisible"
           />
-          <button className={ui.buttonAction} onClick={() => { captchaRef.current.execute() }} disabled={cap ? false : true}>Submit</button>
+          <button className={ui.buttonAction}>Submit</button>
         </form>
       </div>
       <ProfileNav user={user} page={"create"} />

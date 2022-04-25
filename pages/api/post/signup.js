@@ -1,11 +1,18 @@
 import nc from 'next-connect';
-import { createPassword, sendEmail, vfEmail, bs4 } from '../../../scripts/server/util.js'
+import { createPassword, sendEmail, vfEmail, bs4, limiter } from '../../../scripts/server/util.js'
 import { User } from '../../../scripts/server/mongo.js'
 import { verify } from 'hcaptcha';
 import requestIp from 'request-ip';
 import md5 from 'md5';
 
 const app = nc();
+
+app.use(limiter(1000 * 60 * 60 * 6, 5, (req, res) => {
+  res.status(429).json({
+    success: false,
+    message: "Too many signups, please try again later."
+  })
+}))
 
 app.post(async (req, res) => {
   let captchaValid = await verify(process.env.HC_SECRET, req.body['h-captcha-response']);

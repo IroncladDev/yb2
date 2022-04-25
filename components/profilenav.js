@@ -17,7 +17,7 @@ export default function ProfileNav(props) {
     </Link>
     <Link href="/home/create" passHref>
       <a>
-        <div className={styles.navItem + " " + (page === "create" ? styles.active : "")}>
+        <div className={styles.navItem + " " + styles.pulseanim + " " + (page === "create" ? styles.active : "")}>
           <Icon.Plus />
         </div>
       </a>
