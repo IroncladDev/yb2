@@ -1,3 +1,0 @@
- - Reset captcha keys
- - Run next build locally
- - delete todo.md
