@@ -239,7 +239,7 @@ function MapCore(props) {
   const banUser = async (user) => {
     const { value } = await Swal.fire({
       title: "Ban User",
-      html: "Warning!  This user will never be able to access the site again from that device!!  Are you sure you would like to ban them?  If so, please enter a reason.",
+      html: "Warning!  This user will never be able to access the site again from that device!  Are you sure you would like to ban them?  If so, please enter a reason.",
       input: "text",
       inputPlaceholder: "Reason for Ban",
       showCancelButton: true,

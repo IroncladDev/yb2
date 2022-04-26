@@ -29,7 +29,7 @@ export default function Donate() {
       const stripe = await stripePromise;
       Swal.fire({
         title: "Enter Amount",
-        text: "Thanks for offering us a donation!!  Please enter the amount (in USD) of how much you would like to donate.",
+        text: "Thanks for offering us a donation!  Please enter the amount (in USD) of how much you would like to donate.",
         input: "number",
         inputAttributes: {
           min: 1,
