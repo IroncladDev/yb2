@@ -1,6 +1,4 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import router from 'next/router';
 import styles from '../../styles/pages/create.module.scss';
 import ui from '../../styles/ui.module.scss';
 import { clientAuth } from '../../scripts/server/auth.js';
