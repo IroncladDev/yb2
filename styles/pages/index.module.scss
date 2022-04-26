@@ -86,6 +86,8 @@
     top: 0 !important;
     left: 0 !important;
     transform: none !important;
+    width: 100vw !important;
+    padding: 0 calc(var(--space-16));
     padding-top: calc(var(--space-16) * 2);
   }
   .headerTitle, .headerAuthor, .centerPar{

@@ -23,8 +23,11 @@ function TRow(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked])
   return (<div className={styles.tosrow}>
-    <input type="checkbox" onChange={handleCheck} checked={checked}/>
-    <p>{props.children}</p>
+    <label className={styles.checkboxField} style={{display: props.btn ? "none" : "block"}}>
+      <input type="checkbox" onChange={handleCheck} checked={checked} id={"checkbox-" + props.num} />
+      <span className={styles.checkmark}></span>
+    </label>
+    {props.btn ? <label htmlFor={"checkbox-" + props.num} className={ui.buttonAction}>{props.children}</label> : <p>{props.children}</p>}
   </div>)
 }
 
@@ -58,13 +61,13 @@ function BackSvg() {
 function Tos(props) {
   return (<div style={{ display: props.display ? "block" : "none" }} className={styles.tos}>
     <h2>Rules and Statements</h2>
-    <p>Please read and agree to follow each rule or statement before signing up</p>
+    <p>Please read, check, and agree to follow each rule or statement before signing up</p>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={0} setTos={props.setTos}>1. Keep everything on the website clean.  Please do not post inappropriate content, bad words, or post illegal goods/services.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={1} setTos={props.setTos}>2. Be honest.  This platform is built on integrity and honesty.  If someone reports you for not keeping a promise or refusing to do as you&apos;ve posted on the site, we will remove your listing.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={2} setTos={props.setTos}>3. We are not responsible for anyone not doing what they say.  The furthest action we will take is unlisting the person&apos;s service and/or removing them from the site.  We will not refund, pay, or take responsibility for anything you might have lost.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={3} setTos={props.setTos}>4. Agree to our <a href="/terms" target="_blank" rel="noreferrer">Terms</a> and <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> before you proceed.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={4} setTos={props.setTos}>5. Use common sense - just because something isn&apos;t listed here doesn&apos;t mean you can break it.  Don&apos;t attempt to find a flaw in the wording and use it to your advantage.</TRow>
-    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={5} setTos={props.setTos}>6. Thanks for joining us, please check this rule to continue.</TRow>
+    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={5} setTos={props.setTos} btn={true}>Agree & Continue</TRow>
   </div>)
 }
 
@@ -194,6 +197,11 @@ export default function Signup() {
               <HCaptcha
                 sitekey={hcSitekey}
                 onVerify={(token, ekey) => handleVerificationSuccess(token, ekey)}
+                onExpire={() => {
+                  setTos(false);
+                  setCap("");
+                  Swal.fire("Captcha Expired", "Please click the submit button for us again, we're just making sure you're human.")
+                }}
                 ref={captchaRef}
                 size="invisible"
               />

@@ -50,7 +50,7 @@ app.post(async (req, res) => {
   } else {
     res.json({
       success: false,
-      message: "Invalid Captcha.  Please try again."
+      message: "The captcha you entered was invalid or has expired.  Please sign up again."
     })
   }
 })
