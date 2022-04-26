@@ -64,7 +64,7 @@ function Tos(props) {
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={2} setTos={props.setTos}>3. We are not responsible for anyone not doing what they say.  The furthest action we will take is unlisting the person&apos;s service and/or removing them from the site.  We will not refund, pay, or take responsibility for anything you might have lost.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={3} setTos={props.setTos}>4. Agree to our <a href="/terms" target="_blank" rel="noreferrer">Terms</a> and <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> before you proceed.</TRow>
     <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={4} setTos={props.setTos}>5. Use common sense - just because something isn&apos;t listed here doesn&apos;t mean you can break it.  Don&apos;t attempt to find a flaw in the wording and use it to your advantage.</TRow>
-    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={5} setTos={props.setTos}>6. Thanks for joining us, please check this rule to continue/</TRow>
+    <TRow termsChecked={props.termsChecked} setTerms={props.setTerms} num={5} setTos={props.setTos}>6. Thanks for joining us, please check this rule to continue.</TRow>
   </div>)
 }
 
