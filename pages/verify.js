@@ -9,7 +9,7 @@ import Swal from '../scripts/client/modal';
 export default function Verify() {
   Swal.fire({
     title: "Check your inbox",
-    html: "We've sent you a confirmation email.  Before you start using YouBarter, you are required to verify your email.  <strong>Please check your spam folder if you don't see it in your inbox.</strong>  If you don't mind, please mark the email as not spam if it appears in your spam folder.  Thank you.",
+    html: "We've sent you a confirmation email.  Before you start using YouBarter, you are required to verify your email.  <strong>Please check your spam folder if you don't see it in your inbox.</strong>  If the email ended up in your spam folder, please mark it as not spam so we can build up a better reputation to improve the experience of our site.  Thank you.",
     allowEscapeKey: false,
     allowOutsideClick: false,
     confirmButtonText: "Resend verification email",
