@@ -37,6 +37,7 @@
   }
 }
 
+
 .showSearchButton {
   position: absolute;
   top: 50%;
@@ -78,10 +79,15 @@
 
 @media(max-width: 500px){
   .searchEngine{
-    width: calc(100% - 60px);
+    width: 250px;
+    padding: 5px;
+  }
+  .collapseGroupContent{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
   .showSearchButton.showSearch{
-    left: calc(100% - 60px);
+    left: 250px;
   }
 }
 
@@ -249,7 +255,7 @@
 
 .viewPopup {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: calc(100% - 60px);
   overflow-y: auto;
@@ -259,6 +265,7 @@
   padding: 15px 25px;
   max-height: 100vh;
   height: 100vh;
+  overflow-y: auto;
   min-height: 100vh;
   z-index: 10;
 
