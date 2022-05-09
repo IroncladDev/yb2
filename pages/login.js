@@ -118,12 +118,12 @@ export default function Signup() {
       errs.push("Password Incorrect");
     }
 
+    setLoading(false);
     setErrors([...new Set(errs)])
 
     if (errs.length <= 0) {
       formRef.current.submit();
     }
-    setLoading(false);
   };
 
 

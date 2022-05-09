@@ -11,10 +11,16 @@ app.use(limiter(1000 * 60 * 60, 30, (req, res) => {
 }))
 
 app.post(async (req, res) => {
-  let sid = await authenticate(req.body.login, req.body.password);
-  res.json({
-    success: !!sid
-  })
+  try{
+    let sid = await authenticate(req.body.login, req.body.password);
+    res.json({
+      success: !!sid
+    })
+  }catch(e){
+    res.json({
+      success: false,
+    })
+  }
 })
 
 export default app;

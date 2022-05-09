@@ -140,6 +140,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  & > span{
+    display: block;
+  }
 }
 .loadSubmit{
   width: 20px;
