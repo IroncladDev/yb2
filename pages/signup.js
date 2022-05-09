@@ -125,6 +125,12 @@ export default function Signup() {
       errs = errs.filter(x => x !== "Password must contain at least one special character");
     }
 
+    if(/[^a-z0-9]/i.test(username)){
+      errs.push("Username must only contain letters and numbers");
+    }else{
+      errs = errs.filter(x => x !== "Username must only contain letters and numbers");
+    }
+
     if(password !== conf){
       errs.push("Passwords must match");
     }else{
