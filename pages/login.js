@@ -36,6 +36,7 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
 
   const forgot = async () => {
@@ -71,6 +72,7 @@ export default function Signup() {
   }
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     let errs = [...errors];
 
@@ -121,6 +123,7 @@ export default function Signup() {
     if (errs.length <= 0) {
       formRef.current.submit();
     }
+    setLoading(false);
   };
 
 
@@ -171,7 +174,7 @@ export default function Signup() {
                     {errors.map(x => <li key={Math.random()}>{x}</li>)}
                   </ul>
                 </div>}
-              <button type="submit" className={ui.buttonAction + " " + ui.dblock + " " + ui.w100p} style={{ marginBottom: 10 }}>Log In</button>
+              <button type="submit" className={ui.buttonAction + " " + ui.dblock + " " + ui.w100p + " " + styles.submitButton} style={{ marginBottom: 10 }}><span>Log In</span>{loading && <span className={styles.loadSubmit}></span>}</button>
               <a href="#" onClick={forgot}>Forgot Password</a>
             </form>
           </div>

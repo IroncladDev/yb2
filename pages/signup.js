@@ -212,7 +212,7 @@ export default function Signup() {
                   {errors.map(x => <li key={Math.random()}>{x}</li>)}
                 </ul>
               </div>}
-              <button type="submit" className={ui.buttonAction + " " + ui.dblock + " " + ui.w100p}>Sign Up</button>
+              <button type="submit" className={ui.buttonAction + " " + ui.dblock + " " + ui.w100p + " " + styles.submitButton}>Sign Up</button>
             </form>
           </div>
         </div>
