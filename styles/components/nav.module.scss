@@ -27,7 +27,7 @@
 .navBody{
   position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 100vw;
   height: 70px;
   background: var(--accent-primary-default);
   z-index: 8;
@@ -62,7 +62,6 @@
 
 .navCore{
   width: 100vw;
-  max-width: var(--doc-max-width);
   position: fixed;
   bottom: 0;
   z-index: 11;
@@ -91,7 +90,7 @@
   align-self: center;
   text-align: right;
   flex-grow: 1;
-  min-width: 80px;
+  min-width: 60px;
 }
 .navLink > *{
   color: var(--white-strongest) !important;
