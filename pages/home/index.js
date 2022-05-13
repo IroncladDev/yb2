@@ -429,6 +429,12 @@ export default function Dashboard(props) {
     }
   }
 
+  useEffect(() => {
+    if(props.ps){
+      Swal.fire("Thank you!", "Thank you for being so kind to donate to our cause!")
+    }
+  }, [])
+
   //Create the mapbox map
   useEffect(() => {
     fetch(`/api/get/feed`).then(r => r.json()).then(setResults)
@@ -645,6 +651,7 @@ export async function getServerSideProps({ req, query }) {
         currentUser: JSON.stringify(userData),
         keywords,
         viewingItem: serviceExists ? query.srv : false,
+        ps: (query.pay_success ? true : false)
       }
     }
   } else {

@@ -6,9 +6,16 @@ import ui from '../styles/ui.module.scss'
 import Nav from '../components/nav'
 import Fade from '../components/fade'
 import Link from 'next/link'
-import Footer from '../components/footer'
+import Footer from '../components/footer';
+import Swal from '../scripts/client/modal';
+import {useEffect} from 'react'
 
-export default function Home() {
+export default function Home(props) {
+  useEffect(() => {
+    if(props.ps){
+      Swal.fire("Thank you!", "Thank you for being so kind to donate to our cause!")
+    }
+  }, [])
   return (
     <>
       <Head>
@@ -152,12 +159,12 @@ export async function getServerSideProps({ req, query }) {
   if (userData) {
     return {
       redirect: {
-        destination: "/home"
+        destination: "/home" + (query.pay_success ? "?pay_success=" + query.pay_success : ""),
       }
     }
   } else {
     return {
-      props: {}
+      props: { ps: (query.pay_success ? true : false) }
     }
   }
 }

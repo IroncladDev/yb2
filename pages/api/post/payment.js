@@ -22,8 +22,8 @@ app.post(async (req, res) => {
       },
     ],
     mode: "payment",
-    success_url: `${req.headers.host.includes('http') ? req.headers.host : "http://" + req.headers.host}/`,
-    cancel_url: `${req.headers.host.includes('http') ? req.headers.host : "http://" + req.headers.host}/`,
+    success_url: `${req.headers.host.includes('http') ? req.headers.host : "http://" + req.headers.host}/?pay_success=true`,
+    cancel_url: `${req.headers.host.includes('http') ? req.headers.host : "http://" + req.headers.host}/?cancel=true`,
   });
 
   res.json({ id: session.id });
