@@ -21,22 +21,19 @@ export function bs4(string) {
 }
 
 export async function sendEmail(to, subject, body) {
-  return await fetch("https://api.gmass.co/api/transactional", {
+  return await fetch("https://email.connerow.dev/send", {
     headers: {
       "Content-Type": "application/json",
-      "X-apikey": process.env.GMASS_KEY,
       accept: "*/*"
     },
     method: "POST",
     body: JSON.stringify({
-      "transactionalEmailId": Math.random().toString(36).slice(2),
-      "fromEmail": process.env.EMAIL,
-      "fromName": "YouBarter",
+      "email": process.env.EMAIL,
+      password: process.env.GP,
+      auth: process.env.EMAIL_TOKEN,
       "to": to,
-      "cc": "",
-      "bcc": "",
       "subject": subject,
-      "message": body
+      "body": body
     })
   }).then(r => r.json())
 }
